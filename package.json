@@ -1,0 +1,62 @@
+{
+  "name": "static-gen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack -w --mode development",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "Lars Graubner <mail@larsgraubner.de> (https://larsgraubner.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-eslint": "8.2.2",
+    "babel-loader": "7.1.4",
+    "eslint": "4.19.1",
+    "eslint-plugin-flowtype": "2.46.1",
+    "flow-babel-webpack-plugin": "1.1.1",
+    "husky": "0.14.3",
+    "install": "0.11.0",
+    "lint-staged": "7.0.0",
+    "mri": "1.1.0",
+    "prettier": "1.11.1",
+    "shebang-loader": "0.0.1",
+    "webpack": "4.2.0",
+    "webpack-cli": "2.0.13",
+    "webpack-node-externals": "1.6.0"
+  },
+  "babel": {
+    "plugins": [
+      "transform-flow-comments"
+    ]
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "script"
+    },
+    "parser": "babel-eslint",
+    "extends": [
+      "eslint:recommended",
+      "plugin:flowtype/recommended"
+    ],
+    "plugins": [
+      "flowtype"
+    ],
+    "env": {
+      "es6": true,
+      "node": true
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}
