@@ -1,5 +1,4 @@
 const nodeExternals = require('webpack-node-externals');
-const FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -14,5 +13,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [new FlowBabelWebpackPlugin()]
+  plugins: []
 };
