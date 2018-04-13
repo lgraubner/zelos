@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack -w --mode development",
+    "develop": "webpack -w --mode development",
     "build": "webpack --mode production"
   },
   "keywords": [],
@@ -24,10 +24,8 @@
     "install": "0.11.0",
     "lint-staged": "7.0.0",
     "marked": "0.3.19",
-    "mkdirp": "0.5.1",
     "mri": "1.1.0",
     "prettier": "1.11.1",
-    "rimraf": "2.6.2",
     "shebang-loader": "0.0.1",
     "webpack": "4.2.0",
     "webpack-cli": "2.0.13",
@@ -66,5 +64,10 @@
   },
   "prettier": {
     "singleQuote": true
+  },
+  "dependencies": {
+    "chokidar": "2.0.3",
+    "fs-extra": "5.0.0",
+    "serve": "6.5.5"
   }
 }

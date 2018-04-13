@@ -1,38 +1,51 @@
 const { promisify } = require('util');
-const glob = promisify(require('glob'));
 const render = promisify(require('ejs').renderFile);
 const path = require('path');
-const fs = require('fs');
-const mkdirp = promisify(require('mkdirp'));
-const rimraf = promisify(require('rimraf'));
+const fs = require('fs-extra');
+const chokidar = require('chokidar');
 
-const writeFile = promisify(fs.writeFile);
+const copyStaticDirectory = require('../utils/copyStaticDirectory');
+
+const pagesPath = `${process.cwd()}/example/pages`;
+const layoutPath = `${process.cwd()}/example/layouts`;
 
 const renderContent = async (file, type) => {
+  // @TODO: html => copy, md => convert
   if (type === 'ejs') {
     return await render(file);
-  } else if (type = )
+  } else if (type === 'md') {
+    //
+  }
+};
+
+const compile = async filePath => {
+  const relativePath = filePath.replace(pagesPath, '');
+  const ext = path.extname(filePath);
+  const basename = path.basename(relativePath, ext);
+  const fileDir = path.join(global.publicPath, basename);
+
+  await fs.ensureDir(fileDir);
+
+  const content = await renderContent(filePath, ext);
+  const page = await render(`${layoutPath}/default.ejs`, {
+    body: content
+  });
+
+  await fs.writeFile(`${fileDir}/index.html`, page);
 };
 
 const build = async () => {
-  const src = './example';
-  const dest = './public';
+  // clear destination folder
+  await fs.emptyDir(global.publicPath);
 
-  await rimraf(`${dest}/**`);
+  await copyStaticDirectory();
 
-  const files = await glob('**/*.(md|ejs|html)', { cwd: `${src}/pages` });
-
-  files.forEach(async f => {
-    const fileData = path.parse(f);
-    const fileDir = path.join(dest, fileData.dir, fileData.name);
-
-    await mkdirp(fileDir);
-
-    const content = await renderContent(`${src}/pages/${f}`, fileData.ext);
-    const page = await render(`${src}/layouts/default.ejs`, { body: content });
-
-    await writeFile(`${fileDir}/index.html`, page);
-  });
+  chokidar
+    .watch(`${pagesPath}/**/*`, {
+      persistent: false
+    })
+    .on('add', compile)
+    .on('change', compile);
 };
 
 module.exports = build;

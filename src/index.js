@@ -5,6 +5,8 @@ const mri = require('mri');
 const help = require('./commands/help');
 const validateCommand = require('./utils/validateCommand');
 
+global.publicPath = `${process.cwd()}/public`;
+
 const main = async argv_ => {
   const argv = mri(argv_, {
     boolean: ['help', 'version'],
@@ -24,6 +26,7 @@ const main = async argv_ => {
   }
 
   const target = argv._[1];
+  // @TODO: better mechanism, pass args
   const command = validateCommand(argv._[0]);
 
   command(target);
