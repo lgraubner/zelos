@@ -1,4 +1,4 @@
-const serve = require('serve');
+const serve = require('serve')
 
 module.exports = () =>
   serve(global.publicPath, {
@@ -6,4 +6,4 @@ module.exports = () =>
     open: true,
     local: true,
     clipless: true
-  });
+  })
