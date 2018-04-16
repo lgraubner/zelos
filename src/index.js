@@ -5,6 +5,7 @@ const { bold } = require('chalk')
 const debug = require('debug')('ssg:main')
 const resolve = require('resolve')
 
+const pkg = require('../package')
 const commands = require('./commands')
 const exit = require('./utils/exit')
 const error = require('./utils/output/error')
@@ -41,7 +42,7 @@ const main = async argv_ => {
 
   if (!command) {
     if (argv.version) {
-      console.log(require('../package').version)
+      console.log(pkg.version)
       return 0
     }
 
@@ -56,18 +57,23 @@ const main = async argv_ => {
     debug('Falling back to default command %s', command)
   }
 
+  console.log('')
   if (!availableCommands.has(command)) {
-    debug('Command %s not found', command)
+    error(`Command ${command} not found`)
     exit(1)
   }
 
   if (command !== 'new') {
     try {
-      resolve.sync('tap')
+      resolve.sync('tap', {
+        basedir: process.cwd()
+      })
     } catch (err) {
-      error('Command can only be run for a ssg site.')
+      error(`Command can only be run for a ${pkg.name} site.`)
       info(
-        'Either the current working directory does not contain a package.json or "ssg" is not specified as a dependency'
+        `Either the current working directory does not contain a package.json or "${
+          pkg.name
+        }" is not specified as a dependency.`
       )
       exit(1)
     }
@@ -88,7 +94,7 @@ const handleUnexpected = err => {
 
   console.error(err)
 
-  process.exit(1)
+  exit(1)
 }
 
 process.on('uncaughtException', handleUnexpected)

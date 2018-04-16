@@ -9,8 +9,6 @@ const info = require('../utils/output/info')
 const error = require('../utils/output/error')
 const exit = require('../utils/exit')
 
-const layoutDir = `${process.cwd()}/example/layouts`
-
 const renderContent = async (
   content,
   frontmatter,
@@ -19,7 +17,7 @@ const renderContent = async (
 ) => {
   const layoutName = frontmatter.layout || 'default'
 
-  const layoutPath = path.join(layoutDir, `${layoutName}.html`)
+  const layoutPath = path.join(global.layoutPath, `${layoutName}.html`)
 
   try {
     const layout = await fs.readFile(layoutPath)

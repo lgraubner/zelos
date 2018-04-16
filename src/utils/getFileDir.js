@@ -1,8 +1,6 @@
 const path = require('path')
 const get = require('lodash/get')
 
-const pagesPath = `${process.cwd()}/example/pages`
-
 const getFileDir = (filePath, frontmatter) => {
   const url = get(frontmatter, 'data.url')
 
@@ -10,7 +8,7 @@ const getFileDir = (filePath, frontmatter) => {
     return path.join(global.publicPath, url)
   }
 
-  const relativePath = path.relative(pagesPath, filePath)
+  const relativePath = path.relative(global.pagesPath, filePath)
   const basename = path.basename(relativePath)
 
   const dir = relativePath.replace(basename, '')

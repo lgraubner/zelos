@@ -3,7 +3,7 @@ module.exports = {
     return require('./build')
   },
   get develop() {
-    return require('./build')
+    return require('./develop')
   },
   get serve() {
     return require('./serve')
