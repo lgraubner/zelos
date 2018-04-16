@@ -21,7 +21,7 @@ const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
 const help = () =>
   console.log(`
-  ${bold('%s - %s', pkg.name, pkg.description)}
+  ${bold(pkg.name, '-', pkg.description)}
 
   Commands:
 
