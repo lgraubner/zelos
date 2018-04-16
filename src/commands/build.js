@@ -2,7 +2,7 @@ const mri = require('mri')
 const fs = require('fs-extra')
 const chokidar = require('chokidar')
 const frontmatter = require('frontmatter')
-const debug = require('debug')('ssg:build')
+const debug = require('debug')('zelos:build')
 
 const copyStaticDirectory = require('../utils/copyStaticDirectory')
 const logError = require('../utils/logError')

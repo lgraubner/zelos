@@ -2,7 +2,7 @@
 
 const mri = require('mri')
 const { bold } = require('chalk')
-const debug = require('debug')('ssg:main')
+const debug = require('debug')('zelos:main')
 const resolve = require('resolve')
 
 const pkg = require('../package')
@@ -21,7 +21,7 @@ const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
 const help = () =>
   console.log(`
-  ${bold('Simple static site generator')}
+  ${bold('%s - %s', pkg.name, pkg.description)}
 
   Commands:
 
