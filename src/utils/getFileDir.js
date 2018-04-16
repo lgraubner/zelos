@@ -1,8 +1,7 @@
 const path = require('path')
-const get = require('lodash/get')
 
 const getFileDir = (filePath, frontmatter) => {
-  const url = get(frontmatter, 'data.url')
+  const { url } = frontmatter
 
   if (url) {
     return path.join(global.publicPath, url)

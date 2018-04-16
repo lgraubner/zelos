@@ -1,6 +1,3 @@
----
-url: /blog
----
 # Das ist ein Test
 
 yo!

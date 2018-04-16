@@ -2,7 +2,6 @@ const mri = require('mri')
 const fs = require('fs-extra')
 const chokidar = require('chokidar')
 const frontmatter = require('frontmatter')
-const get = require('lodash/get')
 const debug = require('debug')('ssg:build')
 
 const copyStaticDirectory = require('../utils/copyStaticDirectory')
@@ -21,14 +20,14 @@ const processFile = async filePath => {
   debug('found file %s', filePath)
   const fileContent = await fs.readFile(filePath, 'utf8')
   const parsed = frontmatter(fileContent)
-  const fm = get(parsed, 'data', {})
-  const content = get(parsed, 'content', '')
+  const data = parsed.data || {}
+  const content = parsed.content || ''
 
   // get target path and create dir
-  const fileDir = getFileDir(filePath, fm)
+  const fileDir = getFileDir(filePath, data)
   await fs.ensureDir(fileDir)
 
-  const renderedContent = await renderContent(content, fm, filePath)
+  const renderedContent = await renderContent(content, data, filePath)
 
   const file = `${fileDir}/index.html`
   fs.writeFile(file, renderedContent)
@@ -36,7 +35,11 @@ const processFile = async filePath => {
 
 const build = async () => {
   // clear destination folder
+  info('cleaning public folder')
   await fs.emptyDir(global.publicPath)
+
+  info('copying static files')
+  await copyStaticDirectory()
 
   info('building static html for pages')
   chokidar
@@ -46,9 +49,6 @@ const build = async () => {
     .on('add', processFile)
     .on('change', processFile)
     .on('error', err => logError(`Watcher error: ${err}`))
-
-  info('copying static files')
-  await copyStaticDirectory()
 }
 
 const main = async ctx => {
