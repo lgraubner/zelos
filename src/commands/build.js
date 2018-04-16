@@ -21,8 +21,7 @@ const help = () => {
 }
 
 const getFileDir = filePath => {
-  const relativePath = filePath.replace(pagesPath, '')
-  const ext = path.extname(relativePath)
+  const relativePath = path.relative(pagesPath, filePath)
   const basename = path.basename(relativePath)
 
   const dir = relativePath.replace(basename, '')
@@ -32,6 +31,8 @@ const getFileDir = filePath => {
 
     return path.join(global.publicPath, dir)
   }
+
+  const ext = path.extname(relativePath)
 
   return path.join(global.publicPath, dir, path.basename(relativePath, ext))
 }
@@ -87,6 +88,7 @@ const main = async ctx => {
 
 const build = async () => {
   // clear destination folder
+  debug('clear existing public dir')
   await fs.emptyDir(global.publicPath)
 
   debug('copying static dir')
