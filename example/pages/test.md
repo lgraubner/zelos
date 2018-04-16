@@ -1,6 +1,5 @@
 ---
 url: /blog
-layout: none
 ---
 # Das ist ein Test
 

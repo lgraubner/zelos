@@ -1,14 +1,14 @@
 module.exports = {
   get build() {
-    return require('./build');
+    return require('./build')
   },
   get develop() {
-    return require('./develop');
+    return require('./build')
   },
   get serve() {
-    return require('./serve');
+    return require('./serve')
   },
   get new() {
-    return require('./new');
+    return require('./new')
   }
-};
+}
