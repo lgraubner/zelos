@@ -1,11 +1,14 @@
 const mri = require('mri')
 const { promisify } = require('util')
-const render = promisify(require('ejs').renderFile)
+const render = promisify(require('ejs').render)
 const path = require('path')
 const fs = require('fs-extra')
 const chokidar = require('chokidar')
 const debug = require('debug')('ssg:build')
 const frontmatter = require('frontmatter')
+const get = require('lodash/get')
+const marked = require('marked')
+const minify = require('html-minifier').minify
 
 const copyStaticDirectory = require('../utils/copyStaticDirectory')
 const logError = require('../utils/logError')
@@ -20,7 +23,14 @@ const help = () => {
 `)
 }
 
-const getFileDir = filePath => {
+const getFileDir = (filePath, frontmatter) => {
+  const url = get(frontmatter, 'data.url')
+
+  if (url) {
+    debug('found url in frontmatter')
+    return path.join(global.publicPath, url)
+  }
+
   const relativePath = path.relative(pagesPath, filePath)
   const basename = path.basename(relativePath)
 
@@ -37,33 +47,41 @@ const getFileDir = filePath => {
   return path.join(global.publicPath, dir, path.basename(relativePath, ext))
 }
 
-const handleFile = async filePath => {
-  const ext = path.extname(filePath)
-
-  const fileDir = getFileDir(filePath)
-
-  // @TODO: frontmatter url
-  await fs.ensureDir(fileDir)
-
-  if (ext === '.html') {
-    debug('Copying html file to %s', fileDir)
-    return fs.copy(filePath, `${fileDir}/index.html`)
+const renderContent = async (content, ext, layout = 'default') => {
+  if (ext === 'html') {
+    return content
   }
 
-  if (ext === '.ejs') {
-    debug('Rendering ejs file to %s', fileDir)
-    const content = await render(filePath, ext)
-    const fm = frontmatter(content)
-    const layout = fm.layout || 'default'
+  if (ext === 'ejs') {
+    const renderedContent = await render(content)
 
-    const page = await render(`${layoutPath}/${layout}.ejs`, {
-      body: content
+    return await render(`${layoutPath}/${layout}.ejs`, {
+      body: renderedContent
     })
+  }
 
-    return fs.writeFile(`${fileDir}/index.html`, page)
+  if (ext === 'md') {
+    return marked(content)
   }
 
   debug('Unknown file type encountered')
+}
+
+const handleFile = async filePath => {
+  const buffer = await fs.readFile(filePath)
+  const content = buffer.toString()
+  const fm = frontmatter(content)
+  const ext = path.extname(filePath).slice(1)
+
+  const fileDir = getFileDir(filePath, fm)
+
+  await fs.ensureDir(fileDir)
+
+  const page = minify(renderContent(content, ext, fm.layout || 'default'), {
+    collapseWhitespace: true
+  })
+
+  return fs.writeFile(`${fileDir}/index.html`, page)
 }
 
 const main = async ctx => {

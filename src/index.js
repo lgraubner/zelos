@@ -5,7 +5,7 @@ const { bold } = require('chalk')
 const debug = require('debug')('ssg:main')
 
 const commands = require('./commands')
-const config = require(`${process.cwd()}/example/config`)
+const config = require('../example/config')
 
 global.publicPath = `${process.cwd()}/public`
 
