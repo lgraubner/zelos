@@ -19,8 +19,10 @@ const help = () => {
 
 const processFile = async filePath => {
   debug('found file %s', filePath)
-  const content = await fs.readFile(filePath, 'utf8')
-  const fm = get(frontmatter(content), 'data', {})
+  const fileContent = await fs.readFile(filePath, 'utf8')
+  const parsed = frontmatter(fileContent)
+  const fm = get(parsed, 'data', {})
+  const content = get(parsed, 'content', '')
 
   // get target path and create dir
   const fileDir = getFileDir(filePath, fm)
