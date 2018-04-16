@@ -47,7 +47,7 @@ const build = async () => {
 
   info('building static html for pages')
   chokidar
-    .watch(pagesPath, {
+    .watch(`${pagesPath}/**/*.md`, {
       persistent: process.env.SSG_ENV === 'dev'
     })
     .on('add', processFile)

@@ -3,11 +3,18 @@
 const mri = require('mri')
 const { bold } = require('chalk')
 const debug = require('debug')('ssg:main')
+const resolve = require('resolve')
 
 const commands = require('./commands')
+const exit = require('./utils/exit')
+const error = require('./utils/output/error')
+const info = require('./utils/output/info')
 const config = require('../example/config')
 
 global.publicPath = `${process.cwd()}/public`
+global.staticPath = `${process.cwd()}/static`
+global.pagesPath = `${process.cwd()}/pages`
+global.layoutPath = `${process.cwd()}/layouts`
 
 const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
@@ -51,7 +58,19 @@ const main = async argv_ => {
 
   if (!availableCommands.has(command)) {
     debug('Command %s not found', command)
-    return 1
+    exit(1)
+  }
+
+  if (command !== 'new') {
+    try {
+      resolve.sync('tap')
+    } catch (err) {
+      error('Command can only be run for a ssg site.')
+      info(
+        'Either the current working directory does not contain a package.json or "ssg" is not specified as a dependency'
+      )
+      exit(1)
+    }
   }
 
   const ctx = {
