@@ -7,8 +7,8 @@ const chokidar = require('chokidar')
 const debug = require('debug')('ssg:build')
 const frontmatter = require('frontmatter')
 
-const copyStaticDirectory = require('../utils/copy-static-directory')
-const logError = require('../utils/log-error')
+const copyStaticDirectory = require('../utils/copyStaticDirectory')
+const logError = require('../utils/logError')
 const info = require('../utils/output/info')
 
 const pagesPath = `${process.cwd()}/example/pages`
