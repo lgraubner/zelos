@@ -5,6 +5,7 @@ const { bold } = require('chalk')
 const debug = require('debug')('ssg:main')
 
 const commands = require('./commands')
+const config = require(`${process.cwd()}/example/config`)
 
 global.publicPath = `${process.cwd()}/public`
 
@@ -54,7 +55,8 @@ const main = async argv_ => {
   }
 
   const ctx = {
-    argv: argv_
+    argv: argv_,
+    config
   }
 
   return commands[command](ctx)
