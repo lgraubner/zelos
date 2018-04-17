@@ -33,7 +33,14 @@ const processFile = async (filePath: string, config: Object): Promise<any> => {
   const renderedContent = await renderContent(content, data, filePath, config)
 
   const file = `${fileDir}/index.html`
-  return fs.writeFile(file, renderedContent)
+  await fs.writeFile(file, renderedContent)
+
+  // @TODO: add full url
+  return {
+    file,
+    frontmatter: data,
+    url: config.siteUrl
+  }
 }
 
 const build = async (config: Object): Promise<any> => {
@@ -47,7 +54,11 @@ const build = async (config: Object): Promise<any> => {
   info('building static html for pages')
   const files = glob.sync(`${config.pagesPath}/**/*.md`)
   const filePromises = files.map(filePath => processFile(filePath, config))
-  await Promise.all(filePromises)
+
+  const pages = await Promise.all(filePromises)
+  console.log(pages)
+
+  // @TODO: get page urls from promise all, build sitemap
 
   info('generate service worker\n')
   const swPath = path.resolve(config.publicPath, 'sw.js')
