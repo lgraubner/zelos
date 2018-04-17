@@ -10,7 +10,7 @@ const copyFile = filePath => {
 module.exports = (watch = false) =>
   chokidar
     .watch(global.staticPath, {
-      ignored: /\.[^/\\]+$/,
+      ignored: /(^|[/\\])\../,
       persistent: watch
     })
     .on('add', copyFile)

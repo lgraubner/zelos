@@ -3,11 +3,15 @@ const fs = require('fs-extra')
 const chokidar = require('chokidar')
 const frontmatter = require('frontmatter')
 const debug = require('debug')('zelos:build')
+const swPrecache = require('sw-precache')
+const path = require('path')
+const wait = require('waait')
 
-const copyStaticDirectory = require('../utils/copyStaticDirectory')
+const copyStaticDirectory = require('../copyStaticDirectory')
+const renderContent = require('../renderContent')
+
 const logError = require('../utils/logError')
 const info = require('../utils/output/info')
-const renderContent = require('../utils/renderContent')
 const getFileDir = require('../utils/getFileDir')
 
 const help = () => {
@@ -30,7 +34,15 @@ const processFile = async filePath => {
   const renderedContent = await renderContent(content, data, filePath)
 
   const file = `${fileDir}/index.html`
-  fs.writeFile(file, renderedContent)
+  await fs.writeFile(file, renderedContent)
+}
+
+const generateServiceWorker = async () => {
+  const swPath = path.resolve(global.publicPath, 'sw.js')
+  swPrecache.write(swPath, {
+    staticFileGlobs: [`${global.publicPath}/**/*`],
+    stripPrefix: global.publicPath
+  })
 }
 
 const build = async () => {
@@ -49,6 +61,10 @@ const build = async () => {
     .on('add', processFile)
     .on('change', processFile)
     .on('error', err => logError(`Watcher error: ${err}`))
+
+  await wait(3000)
+  info('generate service worker')
+  await generateServiceWorker()
 }
 
 const main = async ctx => {

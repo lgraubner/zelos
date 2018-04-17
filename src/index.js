@@ -1,16 +1,16 @@
-#!/usr/bin/env node
-
+// @flow
 const mri = require('mri')
+// $FlowFixMe
 const { bold } = require('chalk')
 const debug = require('debug')('zelos:main')
-const resolve = require('resolve')
 
 const pkg = require('../package')
 const commands = require('./commands')
 const exit = require('./utils/exit')
 const error = require('./utils/output/error')
 const info = require('./utils/output/info')
-const config = require('../example/config')
+const logError = require('./utils/logError')
+const readConfigFile = require('./utils/readConfigFile')
 
 global.publicPath = `${process.cwd()}/public`
 global.staticPath = `${process.cwd()}/static`
@@ -19,7 +19,7 @@ global.layoutPath = `${process.cwd()}/layouts`
 
 const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
-const help = () =>
+const help = (): void =>
   console.log(`
   ${bold(pkg.name, '-', pkg.description)}
 
@@ -29,7 +29,7 @@ const help = () =>
     -h, --help          Display help
 `)
 
-const main = async argv_ => {
+const main = async (argv_: string[]) => {
   const argv = mri(argv_, {
     boolean: ['help', 'version'],
     alias: {
@@ -57,26 +57,29 @@ const main = async argv_ => {
     debug('Falling back to default command %s', command)
   }
 
+  let config
+
+  if (command !== 'new') {
+    try {
+      config = await readConfigFile()
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        error('Config file not found.')
+        info(
+          'The current working directory does not contain a config.json which is required for a zelos site.'
+        )
+      } else {
+        logError(err)
+      }
+
+      exit(1)
+    }
+  }
+
   console.log('')
   if (!availableCommands.has(command)) {
     error(`Command ${command} not found`)
     exit(1)
-  }
-
-  if (command !== 'new') {
-    try {
-      resolve.sync('tap', {
-        basedir: process.cwd()
-      })
-    } catch (err) {
-      error(`Command can only be run for a ${pkg.name} site.`)
-      info(
-        `Either the current working directory does not contain a package.json or "${
-          pkg.name
-        }" is not specified as a dependency.`
-      )
-      exit(1)
-    }
   }
 
   const ctx = {

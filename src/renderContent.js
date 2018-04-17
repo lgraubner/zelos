@@ -29,14 +29,10 @@ const renderContent = async (
       }
     })
 
-    const html = template(
-      Object.assign(
-        {
-          content: contentHtml
-        },
-        frontmatter
-      )
-    )
+    const html = template({
+      content: contentHtml,
+      ...frontmatter
+    })
 
     if (minifyContent) {
       return minify(html, {
