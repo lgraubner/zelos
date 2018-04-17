@@ -1,6 +1,11 @@
+// @flow
 const path = require('path')
 
-const getFileDir = (filePath, frontmatter, config) => {
+const getFileDir = (
+  filePath: string,
+  frontmatter: Object,
+  config: Object
+): string => {
   const { url } = frontmatter
 
   if (url) {

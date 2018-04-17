@@ -1,3 +1,4 @@
-const exit = (code = 0) => process.exit(code)
+// @flow
+const exit = (code: number = 0): any => process.exit(code)
 
 module.exports = exit

@@ -1,3 +1,4 @@
+// @flow
 const mri = require('mri')
 const fs = require('fs-extra')
 const frontmatter = require('frontmatter')
@@ -18,7 +19,7 @@ const help = () => {
 `)
 }
 
-const processFile = async (filePath, config) => {
+const processFile = async (filePath: string, config: Object): Promise<any> => {
   debug('found file %s', filePath)
   const fileContent = await fs.readFile(filePath, 'utf8')
   const parsed = frontmatter(fileContent)
@@ -35,7 +36,7 @@ const processFile = async (filePath, config) => {
   return fs.writeFile(file, renderedContent)
 }
 
-const build = async config => {
+const build = async (config: Object): Promise<any> => {
   // clear destination folder
   info('cleaning public folder')
   await fs.emptyDir(config.publicPath)
@@ -48,7 +49,7 @@ const build = async config => {
   const filePromises = files.map(filePath => processFile(filePath, config))
   await Promise.all(filePromises)
 
-  info('generate service worker')
+  info('generate service worker\n')
   const swPath = path.resolve(config.publicPath, 'sw.js')
   await swPrecache.write(swPath, {
     staticFileGlobs: [`${config.publicPath}/**/*`],
@@ -56,7 +57,7 @@ const build = async config => {
   })
 }
 
-const main = async ctx => {
+const main = async (ctx: Object): Promise<any> => {
   const argv = mri(ctx.argv.slice(1), {
     boolean: ['help'],
     alias: {

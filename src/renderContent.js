@@ -1,3 +1,4 @@
+// @flow
 const handlebars = require('handlebars')
 const path = require('path')
 const fs = require('fs-extra')
@@ -10,12 +11,12 @@ const error = require('./utils/output/error')
 const exit = require('./utils/exit')
 
 const renderContent = async (
-  content,
-  frontmatter,
-  filePath,
-  config,
-  minifyContent = true
-) => {
+  content: string,
+  frontmatter: Object,
+  filePath: string,
+  config: Object,
+  minifyContent: boolean = true
+): Promise<string | void> => {
   const layoutName = frontmatter.layout || 'default'
 
   const layoutPath = path.join(config.layoutPath, `${layoutName}.html`)

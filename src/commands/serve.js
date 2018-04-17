@@ -1,6 +1,7 @@
+// @flow
 const serve = require('serve')
 
-module.exports = ctx =>
+module.exports = (ctx: Object): any =>
   serve(ctx.config.publicPath, {
     port: 3000,
     open: true,

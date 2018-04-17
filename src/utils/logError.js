@@ -1,4 +1,5 @@
-const logError = (...args) => {
+// @flow
+const logError = (...args: Array<any>): void => {
   console.error(...args)
 }
 

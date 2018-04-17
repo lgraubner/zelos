@@ -1,8 +1,9 @@
+// @flow
 const { resolve } = require('path')
 
 const cwd = process.cwd()
 
-const createConfig = localConfig => ({
+const createConfig = (localConfig: Object): Object => ({
   publicPath: resolve(cwd, 'public'),
   staticPath: resolve(cwd, 'static'),
   pagesPath: resolve(cwd, 'pages'),
