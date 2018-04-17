@@ -1,8 +1,8 @@
 const fs = require('fs-extra')
-const path = require('path')
+const { resolve } = require('path')
 
 const readConfigFile = async () => {
-  const configPath = path.resolve(process.cwd(), 'config.json')
+  const configPath = resolve(process.cwd(), 'config.json')
   return await fs.readJson(configPath)
 }
 

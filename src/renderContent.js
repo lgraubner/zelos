@@ -4,20 +4,21 @@ const fs = require('fs-extra')
 const marked = require('marked')
 const minify = require('html-minifier').minify
 
-const logError = require('../utils/logError')
-const info = require('../utils/output/info')
-const error = require('../utils/output/error')
-const exit = require('../utils/exit')
+const logError = require('./utils/logError')
+const info = require('./utils/output/info')
+const error = require('./utils/output/error')
+const exit = require('./utils/exit')
 
 const renderContent = async (
   content,
   frontmatter,
   filePath,
+  config,
   minifyContent = true
 ) => {
   const layoutName = frontmatter.layout || 'default'
 
-  const layoutPath = path.join(global.layoutPath, `${layoutName}.html`)
+  const layoutPath = path.join(config.layoutPath, `${layoutName}.html`)
 
   try {
     const layout = await fs.readFile(layoutPath)

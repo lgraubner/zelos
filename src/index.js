@@ -5,17 +5,15 @@ const { bold } = require('chalk')
 const debug = require('debug')('zelos:main')
 
 const pkg = require('../package')
+
 const commands = require('./commands')
+const createConfig = require('./createConfig')
+
 const exit = require('./utils/exit')
 const error = require('./utils/output/error')
 const info = require('./utils/output/info')
 const logError = require('./utils/logError')
 const readConfigFile = require('./utils/readConfigFile')
-
-global.publicPath = `${process.cwd()}/public`
-global.staticPath = `${process.cwd()}/static`
-global.pagesPath = `${process.cwd()}/pages`
-global.layoutPath = `${process.cwd()}/layouts`
 
 const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
@@ -61,7 +59,8 @@ const main = async (argv_: string[]) => {
 
   if (command !== 'new') {
     try {
-      config = await readConfigFile()
+      const localConfig = await readConfigFile()
+      config = createConfig(localConfig)
     } catch (err) {
       if (err.code === 'ENOENT') {
         error('Config file not found.')

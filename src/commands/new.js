@@ -1,6 +1,6 @@
 const mri = require('mri')
 const fs = require('fs-extra')
-const path = require('path')
+const { resolve } = require('path')
 
 const logError = require('../utils/logError')
 const error = require('../utils/output/error')
@@ -19,11 +19,11 @@ const configContent = `module.exports = {
 `
 
 const bootstrap = async projectPath => {
-  const layoutDir = path.resolve(projectPath, 'layouts')
-  const pagesDir = path.resolve(projectPath, 'pages')
-  const staticDir = path.resolve(projectPath, 'static')
+  const layoutDir = resolve(projectPath, 'layouts')
+  const pagesDir = resolve(projectPath, 'pages')
+  const staticDir = resolve(projectPath, 'static')
 
-  const configPath = path.resolve(projectPath, 'config.js')
+  const configPath = resolve(projectPath, 'config.js')
 
   // make sure project dir exists
   await fs.ensureDir(projectPath)
@@ -59,7 +59,7 @@ const main = async ctx => {
 
   console.log('')
 
-  const projectPath = path.resolve(process.cwd(), target)
+  const projectPath = resolve(process.cwd(), target)
 
   const exists = await fs.pathExists(projectPath)
   if (exists) {
