@@ -16,7 +16,7 @@ const renderContent = async (
   groupedPages: Object,
   config: Object
 ): Promise<string | void> => {
-  const layoutName = page.frontmatter.layout || 'default'
+  const layoutName = page.frontmatter.layout || config.defaultLayout
 
   const layoutPath = path.join(config.layoutPath, `${layoutName}.html`)
 

@@ -1,7 +1,6 @@
 // @flow
 const mri = require('mri')
 const fs = require('fs-extra')
-const frontmatter = require('frontmatter')
 const debug = require('debug')('zelos:build')
 const swPrecache = require('sw-precache')
 const path = require('path')
@@ -17,6 +16,7 @@ const createSitemap = require('../createSitemap')
 const logError = require('../utils/logError')
 const info = require('../utils/output/info')
 const getUrlPath = require('../utils/getUrlPath')
+const parseFile = require('../utils/parseFile')
 
 const help = () => {
   console.log(`
@@ -37,19 +37,17 @@ const scanFiles = async (config: Object): Promise<any> => {
   return Promise.all(
     files.map(async filePath => {
       debug('found file %s', filePath)
-      const fileContent = await fs.readFile(filePath, 'utf8')
-      const parsed = frontmatter(fileContent)
-      const data = parsed.data || {}
+      const { frontmatter } = await parseFile(filePath)
 
       // get target path and create dir
       const relativePath = path.relative(config.pagesPath, filePath)
-      const urlPath = getUrlPath(relativePath, data)
+      const urlPath = getUrlPath(relativePath, frontmatter)
       const file = path.join(config.publicPath, urlPath, 'index.html')
 
       return {
         srcFile: filePath,
         file,
-        frontmatter: data,
+        frontmatter,
         url: url.resolve(config.siteUrl, urlPath)
       }
     })
@@ -57,12 +55,13 @@ const scanFiles = async (config: Object): Promise<any> => {
 }
 
 const createPages = async (pages: Array<Object>, config) => {
-  const groupedPages = groupBy(pages, page => page.frontmatter.type || 'page')
+  const groupedPages = groupBy(
+    pages,
+    page => page.frontmatter.type || config.defaultPageType
+  )
   return Promise.all(
     pages.map(async page => {
-      const fileContent = await fs.readFile(page.srcFile, 'utf8')
-      const parsed = frontmatter(fileContent)
-      const content = parsed.content || ''
+      const { content } = await parseFile(page.srcFile)
 
       await fs.ensureDir(path.dirname(page.file))
 

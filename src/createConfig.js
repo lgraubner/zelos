@@ -11,6 +11,8 @@ const createConfig = (localConfig: Object): Object => ({
   serviceWorker: true,
   sitemap: true,
   minifyContent: true,
+  defaultLayout: 'default',
+  defaultPageType: 'page',
   ...localConfig
 })
 
