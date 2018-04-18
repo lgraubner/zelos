@@ -57,7 +57,7 @@ const scanFiles = async (config: Object): Promise<any> => {
 }
 
 const createPages = async (pages: Array<Object>, config) => {
-  const groupedPages = groupBy(pages, page => page.frontmatter.type || 'post')
+  const groupedPages = groupBy(pages, page => page.frontmatter.type || 'page')
   return Promise.all(
     pages.map(async page => {
       const fileContent = await fs.readFile(page.srcFile, 'utf8')
