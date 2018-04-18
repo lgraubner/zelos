@@ -6,13 +6,14 @@ const debug = require('debug')('zelos:build')
 const swPrecache = require('sw-precache')
 const path = require('path')
 const glob = require('glob')
+const url = require('url')
 
 const renderContent = require('../renderContent')
 const createSitemap = require('../createSitemap')
 
 const logError = require('../utils/logError')
 const info = require('../utils/output/info')
-const getFileDir = require('../utils/getFileDir')
+const getUrlPath = require('../utils/getUrlPath')
 
 const help = () => {
   console.log(`
@@ -28,7 +29,9 @@ const processFile = async (filePath: string, config: Object): Promise<any> => {
   const content = parsed.content || ''
 
   // get target path and create dir
-  const fileDir = getFileDir(filePath, data, config)
+  const relativePath = path.relative(config.pagesPath, filePath)
+  const urlPath = getUrlPath(relativePath, data)
+  const fileDir = path.join(config.publicPath, urlPath)
   await fs.ensureDir(fileDir)
 
   const renderedContent = await renderContent(content, data, filePath, config)
@@ -36,11 +39,10 @@ const processFile = async (filePath: string, config: Object): Promise<any> => {
   const file = `${fileDir}/index.html`
   await fs.writeFile(file, renderedContent)
 
-  // @TODO: add full url
   return {
     file,
     frontmatter: data,
-    url: config.siteUrl
+    url: url.resolve(config.siteUrl, urlPath)
   }
 }
 
