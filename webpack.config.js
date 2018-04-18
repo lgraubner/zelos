@@ -14,7 +14,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: ['shebang-loader', 'babel-loader']
+        loaders: ['babel-loader']
       }
     ]
   },

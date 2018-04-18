@@ -8,6 +8,7 @@ const path = require('path')
 const glob = require('glob')
 
 const renderContent = require('../renderContent')
+const createSitemap = require('../createSitemap')
 
 const logError = require('../utils/logError')
 const info = require('../utils/output/info')
@@ -56,16 +57,22 @@ const build = async (config: Object): Promise<any> => {
   const filePromises = files.map(filePath => processFile(filePath, config))
 
   const pages = await Promise.all(filePromises)
-  console.log(pages)
 
-  // @TODO: get page urls from promise all, build sitemap
+  if (config.sitemap) {
+    info('creating sitemap')
+    await createSitemap(pages, config)
+  }
 
-  info('generate service worker\n')
-  const swPath = path.resolve(config.publicPath, 'sw.js')
-  await swPrecache.write(swPath, {
-    staticFileGlobs: [`${config.publicPath}/**/*`],
-    stripPrefix: config.publicPath
-  })
+  if (config.serviceWorker) {
+    info('generating service worker\n')
+    const swPath = path.resolve(config.publicPath, 'sw.js')
+    await swPrecache.write(swPath, {
+      staticFileGlobs: [`${config.publicPath}/**/*`],
+      stripPrefix: config.publicPath
+    })
+  }
+
+  console.log(`Built ${pages.length} pages.`)
 }
 
 const main = async (ctx: Object): Promise<any> => {

@@ -8,6 +8,8 @@ const createConfig = (localConfig: Object): Object => ({
   staticPath: resolve(cwd, 'static'),
   pagesPath: resolve(cwd, 'pages'),
   layoutPath: resolve(cwd, 'layouts'),
+  serviceWorker: true,
+  sitemap: true,
   ...localConfig
 })
 

@@ -36,7 +36,6 @@
     "mri": "1.1.0",
     "prettier": "1.12.1",
     "serve": "6.5.5",
-    "shebang-loader": "0.0.1",
     "sw-precache": "5.2.1",
     "waait": "1.0.1",
     "webpack": "4.5.0",
