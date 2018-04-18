@@ -7,6 +7,8 @@ const swPrecache = require('sw-precache')
 const path = require('path')
 const glob = require('glob')
 const url = require('url')
+const nanoseconds = require('nanoseconds')
+const prettyMs = require('pretty-ms')
 
 const renderContent = require('../renderContent')
 const createSitemap = require('../createSitemap')
@@ -19,6 +21,14 @@ const help = () => {
   console.log(`
   build help
 `)
+}
+
+const getFormattedExecutionTime = (startTime: [number, number]): string => {
+  const endTime = process.hrtime(startTime)
+  // convert to ms and round
+  const nanoTime = Math.ceil(nanoseconds(endTime) / 1e9)
+
+  return prettyMs(nanoTime)
 }
 
 const processFile = async (filePath: string, config: Object): Promise<any> => {
@@ -47,6 +57,8 @@ const processFile = async (filePath: string, config: Object): Promise<any> => {
 }
 
 const build = async (config: Object): Promise<any> => {
+  const startTime = process.hrtime()
+
   // clear destination folder
   info('cleaning public folder')
   await fs.emptyDir(config.publicPath)
@@ -74,7 +86,8 @@ const build = async (config: Object): Promise<any> => {
     })
   }
 
-  console.log(`Built ${pages.length} pages.`)
+  const executionTime = getFormattedExecutionTime(startTime)
+  console.log(`Built ${pages.length} pages in ${executionTime}.`)
 }
 
 const main = async (ctx: Object): Promise<any> => {
