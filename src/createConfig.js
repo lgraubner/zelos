@@ -10,6 +10,7 @@ const createConfig = (localConfig: Object): Object => ({
   layoutPath: resolve(cwd, 'layouts'),
   serviceWorker: true,
   sitemap: true,
+  minifyContent: true,
   ...localConfig
 })
 

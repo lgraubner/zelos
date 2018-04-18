@@ -15,8 +15,7 @@ const getUrlPath = (filePath: string, frontmatter?: Object = {}): string => {
   }
 
   const basename = path.basename(filePath)
-
-  const dir = filePath.replace(basename, '')
+  const dir = path.dirname(filePath)
 
   if (basename.startsWith('index')) {
     return normalizeUrl(dir)

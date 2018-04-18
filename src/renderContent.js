@@ -12,12 +12,11 @@ const exit = require('./utils/exit')
 
 const renderContent = async (
   content: string,
-  frontmatter: Object,
-  filePath: string,
-  config: Object,
-  minifyContent: boolean = true
+  page: Object,
+  groupedPages: Object,
+  config: Object
 ): Promise<string | void> => {
-  const layoutName = frontmatter.layout || 'default'
+  const layoutName = page.frontmatter.layout || 'default'
 
   const layoutPath = path.join(config.layoutPath, `${layoutName}.html`)
 
@@ -33,10 +32,11 @@ const renderContent = async (
 
     const html = template({
       content: contentHtml,
-      ...frontmatter
+      ...page,
+      ...groupedPages
     })
 
-    if (minifyContent) {
+    if (config.minifyContent) {
       return minify(html, {
         collapseBooleanAttributes: true,
         collapseWhitespace: true,
@@ -61,7 +61,7 @@ const renderContent = async (
   } catch (err) {
     if (err.code === 'ENOENT') {
       error(`Layout "${layoutName}" could not be found.`)
-      info(filePath)
+      info(page.srcFile)
       exit(1)
     }
 

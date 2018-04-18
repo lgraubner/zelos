@@ -9,6 +9,7 @@ const glob = require('glob')
 const url = require('url')
 const nanoseconds = require('nanoseconds')
 const prettyMs = require('pretty-ms')
+const groupBy = require('lodash/groupBy')
 
 const renderContent = require('../renderContent')
 const createSitemap = require('../createSitemap')
@@ -31,29 +32,50 @@ const getFormattedExecutionTime = (startTime: [number, number]): string => {
   return prettyMs(nanoTime)
 }
 
-const processFile = async (filePath: string, config: Object): Promise<any> => {
-  debug('found file %s', filePath)
-  const fileContent = await fs.readFile(filePath, 'utf8')
-  const parsed = frontmatter(fileContent)
-  const data = parsed.data || {}
-  const content = parsed.content || ''
+const scanFiles = async (config: Object): Promise<any> => {
+  const files = glob.sync(`${config.pagesPath}/**/*.md`)
+  return Promise.all(
+    files.map(async filePath => {
+      debug('found file %s', filePath)
+      const fileContent = await fs.readFile(filePath, 'utf8')
+      const parsed = frontmatter(fileContent)
+      const data = parsed.data || {}
 
-  // get target path and create dir
-  const relativePath = path.relative(config.pagesPath, filePath)
-  const urlPath = getUrlPath(relativePath, data)
-  const fileDir = path.join(config.publicPath, urlPath)
-  await fs.ensureDir(fileDir)
+      // get target path and create dir
+      const relativePath = path.relative(config.pagesPath, filePath)
+      const urlPath = getUrlPath(relativePath, data)
+      const file = path.join(config.publicPath, urlPath, 'index.html')
 
-  const renderedContent = await renderContent(content, data, filePath, config)
+      return {
+        srcFile: filePath,
+        file,
+        frontmatter: data,
+        url: url.resolve(config.siteUrl, urlPath)
+      }
+    })
+  )
+}
 
-  const file = `${fileDir}/index.html`
-  await fs.writeFile(file, renderedContent)
+const createPages = async (pages: Array<Object>, config) => {
+  const groupedPages = groupBy(pages, page => page.frontmatter.type || 'post')
+  return Promise.all(
+    pages.map(async page => {
+      const fileContent = await fs.readFile(page.srcFile, 'utf8')
+      const parsed = frontmatter(fileContent)
+      const content = parsed.content || ''
 
-  return {
-    file,
-    frontmatter: data,
-    url: url.resolve(config.siteUrl, urlPath)
-  }
+      await fs.ensureDir(path.dirname(page.file))
+
+      const renderedContent = await renderContent(
+        content,
+        page,
+        groupedPages,
+        config
+      )
+
+      await fs.writeFile(page.file, renderedContent)
+    })
+  )
 }
 
 const build = async (config: Object): Promise<any> => {
@@ -67,10 +89,8 @@ const build = async (config: Object): Promise<any> => {
   await fs.copy(config.staticPath, config.publicPath)
 
   info('building static html for pages')
-  const files = glob.sync(`${config.pagesPath}/**/*.md`)
-  const filePromises = files.map(filePath => processFile(filePath, config))
-
-  const pages = await Promise.all(filePromises)
+  const pages = await scanFiles(config)
+  await createPages(pages, config)
 
   if (config.sitemap) {
     info('creating sitemap')
