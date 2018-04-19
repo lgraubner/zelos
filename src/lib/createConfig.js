@@ -2,18 +2,18 @@
 const readConfigFile = require('../utils/readConfigFile')
 
 const defaultConfig = {
-  publicDir: 'public',
-  staticDir: 'static',
   contentDir: 'content',
-  layoutDir: 'layouts',
-  serviceWorker: true,
-  sitemap: true,
-  minifyContent: true,
   defaultLayout: 'default',
   defaultPageType: 'page',
+  drafts: false,
+  layoutDir: 'layouts',
+  minifyContent: true,
+  publicDir: 'public',
   rss: true,
   rssRegex: /\.md$/,
-  drafts: false
+  serviceWorker: true,
+  sitemap: true,
+  staticDir: 'static'
 }
 
 const createConfig = async (): Object => {
