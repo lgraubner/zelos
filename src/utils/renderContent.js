@@ -5,20 +5,18 @@ const fs = require('fs-extra')
 const marked = require('marked')
 const minify = require('html-minifier').minify
 
-const logError = require('./utils/logError')
-const info = require('./utils/output/info')
-const error = require('./utils/output/error')
-const exit = require('./utils/exit')
+const logError = require('./logError')
+const info = require('./output/info')
+const error = require('./output/error')
+const exit = require('./exit')
 
 const renderContent = async (
   content: string,
-  page: Object,
-  groupedPages: Object,
-  config: Object
+  data: Object,
+  layoutFolderPath: string,
+  minifyContent: boolean = true
 ): Promise<string | void> => {
-  const layoutName = page.frontmatter.layout || config.defaultLayout
-
-  const layoutPath = path.join(config.layoutPath, `${layoutName}.html`)
+  const layoutPath = path.join(layoutFolderPath, `${data.page.layout}.html`)
 
   try {
     const layout = await fs.readFile(layoutPath)
@@ -32,11 +30,10 @@ const renderContent = async (
 
     const html = template({
       content: contentHtml,
-      ...page,
-      ...groupedPages
+      ...data
     })
 
-    if (config.minifyContent) {
+    if (minifyContent) {
       return minify(html, {
         collapseBooleanAttributes: true,
         collapseWhitespace: true,
@@ -60,8 +57,8 @@ const renderContent = async (
     return html
   } catch (err) {
     if (err.code === 'ENOENT') {
-      error(`Layout "${layoutName}" could not be found.`)
-      info(page.srcFile)
+      error(`Layout "${data.page.layout}" could not be found.`)
+      info(data.page.srcFile)
       exit(1)
     }
 

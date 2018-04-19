@@ -3,11 +3,12 @@ const mri = require('mri')
 // $FlowFixMe
 const { bold } = require('chalk')
 const debug = require('debug')('zelos:main')
+const { resolve } = require('path')
 
 const pkg = require('../package')
 
 const commands = require('./commands')
-const createConfig = require('./createConfig')
+const createConfig = require('./lib/createConfig')
 
 const exit = require('./utils/exit')
 const error = require('./utils/output/error')
@@ -55,7 +56,7 @@ const main = async (argv_: string[]) => {
     debug('Falling back to default command %s', command)
   }
 
-  let config
+  let config = {}
 
   if (command !== 'new') {
     try {
@@ -81,9 +82,18 @@ const main = async (argv_: string[]) => {
     exit(1)
   }
 
+  const cwd = process.cwd()
+
   const ctx = {
     argv: argv_,
-    config
+    config,
+    paths: {
+      cwd,
+      public: resolve(cwd, config.publicDir),
+      static: resolve(cwd, config.staticDir),
+      content: resolve(cwd, config.contentDir),
+      layouts: resolve(cwd, config.layoutDir)
+    }
   }
 
   return commands[command](ctx)
