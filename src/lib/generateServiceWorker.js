@@ -9,7 +9,8 @@ const generateServiceWorker = (ctx: Object) => {
 
   return swPrecache.write(swPath, {
     staticFileGlobs: [`${paths.public}/**/*`],
-    stripPrefix: paths.public
+    stripPrefix: paths.public,
+    logger: () => {}
   })
 }
 

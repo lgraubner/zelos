@@ -9,8 +9,9 @@ const generateSitemap = require('../lib/generateSitemap')
 const generateServiceWorker = require('../lib/generateServiceWorker')
 const generateRSSFeed = require('../lib/generateRSSFeed')
 
-const info = require('../utils/output/info')
 const formatExecutionTime = require('../utils/formatExecutionTime')
+const plain = require('../utils/output/plain')
+const spinner = require('../utils/output/spinner')
 
 const help = () => {
   console.log(`
@@ -38,34 +39,41 @@ const main = async (ctx: Object): Promise<any> => {
   }
 
   // clear destination folder
-  info('cleaning public folder')
+  // info('cleaning public folder')
+  let line = spinner('cleaning public folder')
   await cleanPublicDir(ctx)
+  line.succeed()
 
-  info('copying static files')
+  line = spinner('copying static files')
   await copyStaticFiles(ctx)
+  line.succeed()
 
-  info('building static html for pages')
+  line = spinner('building static html')
   const pages = await scanPages(ctx)
   await generatePages(pages, ctx)
+  line.succeed()
 
   if (config.rss) {
-    info('generating RSS feed')
+    line = spinner('generating RSS feed')
     await generateRSSFeed(pages, ctx)
+    line.succeed()
   }
 
   if (config.sitemap) {
-    info('creating sitemap')
+    line = spinner('generating sitemap')
     await generateSitemap(pages, ctx)
+    line.succeed()
   }
 
   if (config.serviceWorker) {
-    info('generating service worker\n')
+    line = spinner('generating service worker')
     await generateServiceWorker(ctx)
+    line.succeed()
   }
 
   const endTime = process.hrtime(startTime)
   const executionTime = formatExecutionTime(startTime, endTime)
-  console.log(`Built ${pages.length} pages in ${executionTime}.`)
+  plain(`\n📦  Built ${pages.length} pages in ${executionTime}.`)
 }
 
 module.exports = main

@@ -14,6 +14,7 @@ const exit = require('./utils/exit')
 const error = require('./utils/output/error')
 const info = require('./utils/output/info')
 const logError = require('./utils/logError')
+const plain = require('./utils/output/plain')
 
 const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
@@ -74,7 +75,7 @@ const main = async (argv_: string[]) => {
     }
   }
 
-  console.log('')
+  plain('')
   if (!availableCommands.has(command)) {
     error(`Command ${command} not found`)
     exit(1)
