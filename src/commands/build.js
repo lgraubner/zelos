@@ -3,7 +3,7 @@ const mri = require('mri')
 
 const cleanPublicDir = require('../lib/cleanPublicDir')
 const copyStaticFiles = require('../lib/copyStaticFiles')
-const scanFiles = require('../lib/scanFiles')
+const scanPages = require('../lib/scanPages')
 const generatePages = require('../lib/generatePages')
 const generateSitemap = require('../lib/generateSitemap')
 const generateServiceWorker = require('../lib/generateServiceWorker')
@@ -45,7 +45,7 @@ const main = async (ctx: Object): Promise<any> => {
   await copyStaticFiles(ctx)
 
   info('building static html for pages')
-  const pages = await scanFiles(ctx)
+  const pages = await scanPages(ctx)
   await generatePages(pages, ctx)
 
   if (config.rss) {

@@ -3,6 +3,8 @@ const fs = require('fs-extra')
 const groupBy = require('lodash/groupBy')
 const pluralize = require('pluralize')
 const { dirname } = require('path')
+const pick = require('lodash/pick')
+const { resolve } = require('url')
 
 const renderContent = require('../utils/renderContent')
 const parseFile = require('../utils/parseFile')
@@ -12,6 +14,22 @@ const generatePages = async (pages: Array<Object>, ctx: Object) => {
 
   const groupedPages = groupBy(pages, page => pluralize(page.type))
 
+  const siteData = {
+    ...pick(config, [
+      'rss',
+      'serviceWorker',
+      'sitemap',
+      'siteUrl',
+      'author',
+      'siteName',
+      'description',
+      'params'
+    ]),
+    rssLink: resolve(config.siteUrl, config.rssFilename),
+    serviceWorkerLink: resolve(config.siteUrl, 'sw.js'),
+    sitemapLink: resolve(config.siteUrl, 'sitemap.xml')
+  }
+
   return Promise.all(
     pages.map(async page => {
       const { content } = await parseFile(page.srcFile)
@@ -20,7 +38,7 @@ const generatePages = async (pages: Array<Object>, ctx: Object) => {
 
       const data = {
         page,
-        site: config,
+        site: siteData,
         ...groupedPages
       }
       const renderedContent = await renderContent(

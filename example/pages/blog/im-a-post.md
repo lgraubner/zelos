@@ -1,5 +1,5 @@
 ---
-excludeFromRSS: true
+type: post
 ---
 
 # Das ist ein Test

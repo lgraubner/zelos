@@ -17,19 +17,34 @@ const renderContent = async (
   minifyContent: boolean = true
 ): Promise<string | void> => {
   const layoutPath = path.join(layoutFolderPath, `${data.page.layout}.html`)
+  const baseLayoutPath = path.join(layoutFolderPath, '_base.html')
 
   try {
-    const layout = await fs.readFile(layoutPath)
+    const layout = await fs.readFile(layoutPath, 'utf8')
 
-    const template = handlebars.compile(layout.toString())
+    const template = handlebars.compile(layout)
+
+    // compile content
+    // @TODO: handle html
     const contentHtml = marked(content, {
       highlight: function(code) {
         return require('highlight.js').highlightAuto(code).value
       }
     })
 
-    const html = template({
+    // compile layout
+    // @TODO: check if layout provided
+    const layoutHtml = template({
       content: contentHtml,
+      ...data
+    })
+
+    // compile base html
+    const base = await fs.readFile(baseLayoutPath, 'utf8')
+    const baseTemplate = handlebars.compile(base)
+
+    const html = baseTemplate({
+      content: layoutHtml,
       ...data
     })
 

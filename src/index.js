@@ -89,7 +89,7 @@ const main = async (argv_: string[]) => {
       cwd,
       public: resolve(cwd, config.publicDir),
       static: resolve(cwd, config.staticDir),
-      content: resolve(cwd, config.contentDir),
+      pages: resolve(cwd, config.pagesDir),
       layouts: resolve(cwd, config.layoutDir)
     }
   }

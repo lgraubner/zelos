@@ -5,7 +5,7 @@ const path = require('path')
  * Removes leading slash, ensures trailing slash
  */
 const normalizeUrl = (url: string): string =>
-  `${url.replace(/(^,)|(,$)/g, '')}/`
+  `/${url.replace(/(^\/)|(\/$)/g, '')}/`
 
 const getUrlPath = (filePath: string, frontmatter?: Object = {}): string => {
   const { url } = frontmatter
@@ -18,7 +18,7 @@ const getUrlPath = (filePath: string, frontmatter?: Object = {}): string => {
   const dir = path.dirname(filePath)
 
   if (basename.startsWith('index')) {
-    return normalizeUrl(dir)
+    return '/'
   }
 
   const ext = path.extname(filePath)

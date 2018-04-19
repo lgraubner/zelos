@@ -2,7 +2,7 @@
 const readConfigFile = require('../utils/readConfigFile')
 
 const defaultConfig = {
-  contentDir: 'content',
+  pagesDir: 'pages',
   defaultLayout: 'default',
   defaultPageType: 'page',
   drafts: false,
@@ -10,6 +10,7 @@ const defaultConfig = {
   minifyContent: true,
   publicDir: 'public',
   rss: true,
+  rssFilename: 'feed.xml',
   rssRegex: /\.md$/,
   serviceWorker: true,
   sitemap: true,
