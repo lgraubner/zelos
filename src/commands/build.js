@@ -4,8 +4,8 @@ const mri = require('mri')
 const cleanPublicDir = require('../lib/cleanPublicDir')
 const copyStaticFiles = require('../lib/copyStaticFiles')
 const scanFiles = require('../lib/scanFiles')
-const createPages = require('../lib/createPages')
-const createSitemap = require('../lib/createSitemap')
+const generatePages = require('../lib/generatePages')
+const generateSitemap = require('../lib/generateSitemap')
 const generateServiceWorker = require('../lib/generateServiceWorker')
 const generateRSSFeed = require('../lib/generateRSSFeed')
 
@@ -30,6 +30,8 @@ const main = async (ctx: Object): Promise<any> => {
     }
   })
 
+  // @TODO: extend config
+
   if (argv_.help) {
     help()
     return 0
@@ -44,7 +46,7 @@ const main = async (ctx: Object): Promise<any> => {
 
   info('building static html for pages')
   const pages = await scanFiles(ctx)
-  await createPages(pages, ctx)
+  await generatePages(pages, ctx)
 
   if (config.rss) {
     info('generating RSS feed')
@@ -53,7 +55,7 @@ const main = async (ctx: Object): Promise<any> => {
 
   if (config.sitemap) {
     info('creating sitemap')
-    await createSitemap(pages, ctx)
+    await generateSitemap(pages, ctx)
   }
 
   if (config.serviceWorker) {

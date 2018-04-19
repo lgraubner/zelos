@@ -1,4 +1,5 @@
 // @flow
+const readConfigFile = require('../utils/readConfigFile')
 
 const defaultConfig = {
   publicDir: 'public',
@@ -10,13 +11,18 @@ const defaultConfig = {
   minifyContent: true,
   defaultLayout: 'default',
   defaultPageType: 'page',
-  rss: true
+  rss: true,
+  rssRegex: /\.md$/,
+  drafts: false
 }
 
-// @TODO: merge with cli flags
-const createConfig = (localConfig: Object): Object => ({
-  ...defaultConfig,
-  ...localConfig
-})
+const createConfig = async (): Object => {
+  const localConfig = await readConfigFile()
+
+  return {
+    ...defaultConfig,
+    ...localConfig
+  }
+}
 
 module.exports = createConfig

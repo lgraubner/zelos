@@ -1,3 +1,7 @@
+---
+excludeFromRSS: true
+---
+
 # Das ist ein Test
 
 yo!

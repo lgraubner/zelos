@@ -4,14 +4,16 @@ const fs = require('fs-extra')
 const { join } = require('path')
 
 const generateRSSFeed = async (pages: Object[], ctx: Object): Promise<any> => {
-  const { paths } = ctx
+  const { paths, config } = ctx
   const feed = new RSS()
 
-  pages.map(page =>
-    feed.item({
-      url: page.url
-    })
-  )
+  pages.map(page => {
+    if (config.rssRegex.test(page.srcFile) && !page.excludeFromRSS) {
+      feed.item({
+        url: page.url
+      })
+    }
+  })
 
   const xml = feed.xml({ indent: true })
 

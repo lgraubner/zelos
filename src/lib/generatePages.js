@@ -7,7 +7,7 @@ const { dirname } = require('path')
 const renderContent = require('../utils/renderContent')
 const parseFile = require('../utils/parseFile')
 
-const createPages = async (pages: Array<Object>, ctx: Object) => {
+const generatePages = async (pages: Array<Object>, ctx: Object) => {
   const { config, paths } = ctx
 
   const groupedPages = groupBy(pages, page => pluralize(page.type))
@@ -35,4 +35,4 @@ const createPages = async (pages: Array<Object>, ctx: Object) => {
   )
 }
 
-module.exports = createPages
+module.exports = generatePages
