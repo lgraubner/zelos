@@ -12,6 +12,7 @@ const exit = require('./exit')
 
 const renderContent = async (
   content: string,
+  type: string,
   data: Object,
   layoutFolderPath: string,
   minifyContent: boolean = true
@@ -19,18 +20,24 @@ const renderContent = async (
   const layoutPath = path.join(layoutFolderPath, `${data.page.layout}.html`)
   const baseLayoutPath = path.join(layoutFolderPath, '_base.html')
 
+  // @TODO: cache layout strings
   try {
     const layout = await fs.readFile(layoutPath, 'utf8')
 
     const template = handlebars.compile(layout)
 
+    let contentHtml = ''
     // compile content
-    // @TODO: handle html
-    const contentHtml = marked(content, {
-      highlight: function(code) {
-        return require('highlight.js').highlightAuto(code).value
-      }
-    })
+    if (type === 'md') {
+      contentHtml = marked(content, {
+        highlight: function(code) {
+          return require('highlight.js').highlightAuto(code).value
+        }
+      })
+    } else {
+      const contentTemplate = handlebars.compile(content)
+      contentHtml = contentTemplate(data)
+    }
 
     // compile layout
     // @TODO: check if layout provided

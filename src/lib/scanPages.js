@@ -10,7 +10,7 @@ const parseFile = require('../utils/parseFile')
 const scanPages = async (ctx: Object): Promise<any> => {
   const { paths, config } = ctx
 
-  const files = glob.sync(`${paths.pages}/**/*.md`)
+  const files = glob.sync(`${paths.pages}/**/*.{md,html}`)
 
   return Promise.all(
     files.map(async filePath => {

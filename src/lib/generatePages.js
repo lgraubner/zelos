@@ -2,7 +2,7 @@
 const fs = require('fs-extra')
 const groupBy = require('lodash/groupBy')
 const pluralize = require('pluralize')
-const { dirname } = require('path')
+const { dirname, extname } = require('path')
 const pick = require('lodash/pick')
 const { resolve } = require('url')
 
@@ -41,8 +41,11 @@ const generatePages = async (pages: Array<Object>, ctx: Object) => {
         site: siteData,
         ...groupedPages
       }
+      const ext = extname(page.srcFile).replace('.', '')
+
       const renderedContent = await renderContent(
         content,
+        ext,
         data,
         paths.layouts,
         config.minifyContent
