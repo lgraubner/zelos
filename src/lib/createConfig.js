@@ -9,7 +9,8 @@ const defaultConfig = {
   sitemap: true,
   minifyContent: true,
   defaultLayout: 'default',
-  defaultPageType: 'page'
+  defaultPageType: 'page',
+  rss: true
 }
 
 // @TODO: merge with cli flags

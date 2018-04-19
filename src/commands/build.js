@@ -7,6 +7,7 @@ const scanFiles = require('../lib/scanFiles')
 const createPages = require('../lib/createPages')
 const createSitemap = require('../lib/createSitemap')
 const generateServiceWorker = require('../lib/generateServiceWorker')
+const generateRSSFeed = require('../lib/generateRSSFeed')
 
 const info = require('../utils/output/info')
 const formatExecutionTime = require('../utils/formatExecutionTime')
@@ -44,6 +45,11 @@ const main = async (ctx: Object): Promise<any> => {
   info('building static html for pages')
   const pages = await scanFiles(ctx)
   await createPages(pages, ctx)
+
+  if (config.rss) {
+    info('generating RSS feed')
+    await generateRSSFeed(pages, ctx)
+  }
 
   if (config.sitemap) {
     info('creating sitemap')
