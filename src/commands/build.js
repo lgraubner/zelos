@@ -12,6 +12,7 @@ const groupBy = require('lodash/groupBy')
 
 const renderContent = require('../renderContent')
 const createSitemap = require('../createSitemap')
+const generateRSSFeed = require('../generateRSSFeed')
 
 const logError = require('../utils/logError')
 const info = require('../utils/output/info')
@@ -90,6 +91,11 @@ const build = async (config: Object): Promise<any> => {
   info('building static html for pages')
   const pages = await scanFiles(config)
   await createPages(pages, config)
+
+  if (config.rss) {
+    info('generating RSS feed')
+    await generateRSSFeed(pages, config)
+  }
 
   if (config.sitemap) {
     info('creating sitemap')

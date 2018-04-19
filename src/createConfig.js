@@ -13,6 +13,7 @@ const createConfig = (localConfig: Object): Object => ({
   minifyContent: true,
   defaultLayout: 'default',
   defaultPageType: 'page',
+  rss: true,
   ...localConfig
 })
 

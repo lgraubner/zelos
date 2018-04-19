@@ -38,6 +38,7 @@
     "nanoseconds": "1.0.1",
     "prettier": "1.12.1",
     "pretty-ms": "3.1.0",
+    "rss": "1.2.2",
     "serve": "6.5.5",
     "sw-precache": "5.2.1",
     "waait": "1.0.1",
