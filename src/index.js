@@ -11,10 +11,9 @@ const pkg = require('../package')
 const commands = require('./commands')
 const createConfig = require('./lib/createConfig')
 
+const logError = require('./utils/logError')
 const exit = require('./utils/exit')
 const error = require('./utils/output/error')
-const info = require('./utils/output/info')
-const logError = require('./utils/logError')
 const plain = require('./utils/output/plain')
 
 const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
@@ -60,24 +59,11 @@ const main = async (argv_: string[]) => {
   let config = {}
 
   if (command !== 'new') {
-    try {
-      config = await createConfig()
-    } catch (err) {
-      if (err.code === 'ENOENT') {
-        error('Config file not found.')
-        info(
-          'The current working directory does not contain a config.json which is required for a zelos site.'
-        )
-      } else {
-        logError(err)
-      }
-
-      exit(1)
-    }
+    config = await createConfig()
   }
 
   if (!availableCommands.has(command)) {
-    error(`Command ${command} not found`)
+    error(`Command "${command}" not found.`)
     exit(1)
   }
 
@@ -106,7 +92,7 @@ debug('start')
 const handleUnexpected = err => {
   debug('handling unexpected error')
 
-  console.error(err)
+  logError(err)
 
   exit(1)
 }

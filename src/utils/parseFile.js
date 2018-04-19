@@ -2,13 +2,19 @@
 const frontmatter = require('frontmatter')
 const fs = require('fs-extra')
 
-const parseFile = async (filePath: string) => {
-  const fileContent = await fs.readFile(filePath, 'utf8')
-  const parsed = frontmatter(fileContent)
+const logError = require('../utils/logError')
 
-  return {
-    frontmatter: parsed.data || {},
-    content: parsed.content || ''
+const parseFile = async (filePath: string) => {
+  try {
+    const fileContent = await fs.readFile(filePath, 'utf8')
+    const parsed = frontmatter(fileContent)
+
+    return {
+      frontmatter: parsed.data || {},
+      content: parsed.content || ''
+    }
+  } catch (err) {
+    logError(err)
   }
 }
 
