@@ -2,7 +2,7 @@
 // $FlowFixMe
 const { gray } = require('chalk')
 
-const info = (...msgs: any): any =>
-  console.log(`${gray('>')} ${msgs.join('\n')}`)
+const info = (msg: string, newLine?: boolean = false): any =>
+  console.log(`${newLine ? '\n' : ''}${gray('>')} ${msg}`)
 
 module.exports = info

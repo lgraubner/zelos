@@ -1,7 +1,6 @@
 // @flow
 const handlebars = require('handlebars')
 const path = require('path')
-const fs = require('fs-extra')
 const marked = require('marked')
 const minify = require('html-minifier').minify
 
@@ -9,6 +8,7 @@ const logError = require('./logError')
 const info = require('./output/info')
 const error = require('./output/error')
 const exit = require('./exit')
+const getTemplate = require('./getTemplate')
 
 const renderContent = async (
   content: string,
@@ -17,14 +17,13 @@ const renderContent = async (
   layoutFolderPath: string,
   minifyContent: boolean = true
 ): Promise<string | void> => {
-  const layoutPath = path.join(layoutFolderPath, `${data.page.layout}.html`)
   const baseLayoutPath = path.join(layoutFolderPath, '_base.html')
+  const layoutPath = path.join(layoutFolderPath, `${data.page.layout}.html`)
 
-  // @TODO: cache layout strings
   try {
-    const layout = await fs.readFile(layoutPath, 'utf8')
-
-    const template = handlebars.compile(layout)
+    // compile templates
+    const baseTemplate = await getTemplate(baseLayoutPath)
+    const template = await getTemplate(layoutPath)
 
     let contentHtml = ''
     // compile content
@@ -45,10 +44,6 @@ const renderContent = async (
       content: contentHtml,
       ...data
     })
-
-    // compile base html
-    const base = await fs.readFile(baseLayoutPath, 'utf8')
-    const baseTemplate = handlebars.compile(base)
 
     const html = baseTemplate({
       content: layoutHtml,

@@ -43,6 +43,7 @@
     "rss": "1.2.2",
     "serve": "6.5.5",
     "sw-precache": "5.2.1",
+    "update-notifier": "2.5.0",
     "waait": "1.0.1",
     "webpack": "4.5.0",
     "webpack-cli": "2.0.14",
@@ -52,6 +53,16 @@
     "plugins": [
       "@babel/plugin-transform-flow-strip-types",
       "@babel/plugin-proposal-object-rest-spread"
+    ],
+    "presets": [
+      [
+        "@babel/env",
+        {
+          "targets": {
+            "node": "8"
+          }
+        }
+      ]
     ]
   },
   "eslintConfig": {
@@ -86,5 +97,7 @@
     "singleQuote": true,
     "semi": false
   },
-  "dependencies": {}
+  "dependencies": {
+    "@babel/preset-env": "7.0.0-beta.44"
+  }
 }

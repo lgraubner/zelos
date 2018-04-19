@@ -14,7 +14,8 @@ const defaultConfig = {
   rssRegex: /\.md$/,
   serviceWorker: true,
   sitemap: true,
-  staticDir: 'static'
+  staticDir: 'static',
+  language: 'en'
 }
 
 const createConfig = async (): Object => {

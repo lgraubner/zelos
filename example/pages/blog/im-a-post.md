@@ -1,5 +1,6 @@
 ---
 type: post
+url: /im-a-post
 ---
 
 # Das ist ein Test

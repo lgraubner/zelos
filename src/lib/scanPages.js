@@ -15,7 +15,7 @@ const scanPages = async (ctx: Object): Promise<any> => {
   return Promise.all(
     files.map(async filePath => {
       debug('found file %s', filePath)
-      const { frontmatter } = await parseFile(filePath)
+      const { frontmatter, content } = await parseFile(filePath)
 
       // get target path and create dir
       const relativePath = path.relative(paths.pages, filePath)
@@ -29,7 +29,8 @@ const scanPages = async (ctx: Object): Promise<any> => {
         srcFile: filePath,
         file,
         ...frontmatter,
-        url: url.resolve(config.siteUrl, urlPath)
+        url: url.resolve(config.siteUrl, urlPath),
+        content
       }
     })
   )

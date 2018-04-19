@@ -4,6 +4,7 @@ const mri = require('mri')
 const { bold } = require('chalk')
 const debug = require('debug')('zelos:main')
 const { resolve } = require('path')
+const updateNotifier = require('update-notifier')
 
 const pkg = require('../package')
 
@@ -19,7 +20,7 @@ const plain = require('./utils/output/plain')
 const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
 const help = (): void =>
-  console.log(`
+  plain(`
   ${bold(pkg.name, '-', pkg.description)}
 
   Commands:
@@ -75,7 +76,6 @@ const main = async (argv_: string[]) => {
     }
   }
 
-  plain('')
   if (!availableCommands.has(command)) {
     error(`Command ${command} not found`)
     exit(1)
@@ -95,7 +95,10 @@ const main = async (argv_: string[]) => {
     }
   }
 
-  return commands[command](ctx)
+  // execute command
+  commands[command](ctx)
+
+  updateNotifier({ pkg }).notify()
 }
 
 debug('start')
