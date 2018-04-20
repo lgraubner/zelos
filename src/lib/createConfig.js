@@ -1,4 +1,7 @@
 // @flow
+const error = require('../utils/output/error')
+const exit = require('../utils/exit')
+
 const readConfigFile = require('../utils/readConfigFile')
 
 const defaultConfig = {
@@ -19,11 +22,26 @@ const defaultConfig = {
 }
 
 const createConfig = async (): Object => {
-  const localConfig = await readConfigFile()
+  try {
+    const localConfig = await readConfigFile()
 
-  return {
-    ...defaultConfig,
-    ...localConfig
+    return {
+      ...defaultConfig,
+      ...localConfig
+    }
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      error(
+        'The current working directory does not contain a config.json file.'
+      )
+    } else {
+      error(
+        'An unexpected error occured while reading the config file.',
+        err.message
+      )
+    }
+
+    exit(1)
   }
 }
 

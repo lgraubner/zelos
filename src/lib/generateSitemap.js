@@ -3,7 +3,8 @@ const fs = require('fs-extra')
 const { join } = require('path')
 const spinner = require('ora')
 
-const logError = require('../utils/logError')
+const error = require('../utils/output/error')
+const exit = require('../utils/exit')
 
 const generateSitemap = (pages: Object[], ctx: Object) => {
   const output = spinner('generating sitemap').start()
@@ -25,7 +26,11 @@ const generateSitemap = (pages: Object[], ctx: Object) => {
     output.succeed()
   } catch (err) {
     output.fail()
-    logError(err)
+    error(
+      'An unexpected error occured while generating the sitemap.',
+      err.message
+    )
+    exit(1)
   }
 }
 

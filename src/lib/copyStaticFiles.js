@@ -1,7 +1,9 @@
 // @flow
 const fs = require('fs-extra')
 const spinner = require('ora')
-const logError = require('../utils/logError')
+
+const error = require('../utils/output/error')
+const exit = require('../utils/exit')
 
 const copyStaticFiles = async (ctx: Object) => {
   const output = spinner('copying static files').start()
@@ -10,7 +12,11 @@ const copyStaticFiles = async (ctx: Object) => {
     output.succeed()
   } catch (err) {
     output.fail()
-    logError(err)
+    error(
+      'An unexpected error occured while copying the static files.',
+      err.message
+    )
+    exit(1)
   }
 }
 

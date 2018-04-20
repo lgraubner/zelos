@@ -5,7 +5,8 @@ const { join } = require('path')
 const spinner = require('ora')
 const { resolve } = require('url')
 
-const logError = require('../utils/logError')
+const error = require('../utils/output/error')
+const exit = require('../utils/exit')
 
 const generateRSSFeed = async (pages: Object[], ctx: Object): Promise<any> => {
   const { paths, config } = ctx
@@ -41,7 +42,11 @@ const generateRSSFeed = async (pages: Object[], ctx: Object): Promise<any> => {
     output.succeed()
   } catch (err) {
     output.fail()
-    logError(err)
+    error(
+      'An unexpected error occured while generating the RSS feed.',
+      err.message
+    )
+    exit(1)
   }
 }
 

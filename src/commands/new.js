@@ -2,7 +2,6 @@ const mri = require('mri')
 const fs = require('fs-extra')
 const { resolve } = require('path')
 
-const logError = require('../utils/logError')
 const error = require('../utils/output/error')
 const info = require('../utils/output/info')
 const exit = require('../utils/exit')
@@ -17,27 +16,6 @@ const configContent = `module.exports = {
   siteName: 'My blog'
 }
 `
-
-const bootstrap = async projectPath => {
-  const layoutDir = resolve(projectPath, 'layouts')
-  const pagesDir = resolve(projectPath, 'pages')
-  const staticDir = resolve(projectPath, 'static')
-
-  const configPath = resolve(projectPath, 'config.js')
-
-  // make sure project dir exists
-  await fs.ensureDir(projectPath)
-
-  // create directories
-  await Promise.all([
-    fs.ensureDir(layoutDir),
-    fs.ensureDir(pagesDir),
-    fs.ensureDir(staticDir),
-    fs.writeFile(configPath, configContent)
-  ])
-
-  info('Done. Start hacking!')
-}
 
 const main = async ctx => {
   const argv = mri(ctx.argv.slice(1), {
@@ -72,11 +50,24 @@ const main = async ctx => {
     }
   }
 
-  try {
-    await bootstrap(projectPath)
-  } catch (err) {
-    logError(err)
-  }
+  const layoutDir = resolve(projectPath, 'layouts')
+  const pagesDir = resolve(projectPath, 'pages')
+  const staticDir = resolve(projectPath, 'static')
+
+  const configPath = resolve(projectPath, 'config.js')
+
+  // make sure project dir exists
+  await fs.ensureDir(projectPath)
+
+  // create directories
+  await Promise.all([
+    fs.ensureDir(layoutDir),
+    fs.ensureDir(pagesDir),
+    fs.ensureDir(staticDir),
+    fs.writeFile(configPath, configContent)
+  ])
+
+  info('Done. Start hacking!')
 }
 
 module.exports = main

@@ -11,7 +11,6 @@ const pkg = require('../package')
 const commands = require('./commands')
 const createConfig = require('./lib/createConfig')
 
-const logError = require('./utils/logError')
 const exit = require('./utils/exit')
 const error = require('./utils/output/error')
 const plain = require('./utils/output/plain')
@@ -87,16 +86,4 @@ const main = async (argv_: string[]) => {
   updateNotifier({ pkg }).notify()
 }
 
-debug('start')
-
-const handleUnexpected = err => {
-  debug('handling unexpected error')
-
-  logError(err)
-
-  exit(1)
-}
-
-process.on('uncaughtException', handleUnexpected)
-
-main(process.argv.slice(2)).catch(handleUnexpected)
+main(process.argv.slice(2))

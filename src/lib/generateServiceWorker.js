@@ -4,7 +4,8 @@ const swPrecache = require('sw-precache')
 const spinner = require('ora')
 
 const info = require('../utils/output/info')
-const logError = require('../utils/logError')
+const error = require('../utils/output/error')
+const exit = require('../utils/exit')
 
 const generateServiceWorker = async (ctx: Object) => {
   const { paths } = ctx
@@ -23,7 +24,11 @@ const generateServiceWorker = async (ctx: Object) => {
     })
   } catch (err) {
     output.fail()
-    logError(err)
+    error(
+      'An unexpected error occured while generating the service worker.',
+      err
+    )
+    exit(1)
   }
 }
 

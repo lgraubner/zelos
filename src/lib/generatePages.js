@@ -2,16 +2,18 @@
 const fs = require('fs-extra')
 const groupBy = require('lodash/groupBy')
 const pluralize = require('pluralize')
-const { dirname, extname } = require('path')
+const { dirname } = require('path')
 const pick = require('lodash/pick')
 const { resolve } = require('url')
 const spinner = require('ora')
+const { basename } = require('path')
 
-const renderContent = require('../utils/renderContent')
-const logError = require('../utils/logError')
+const buildPageHTML = require('../utils/buildPageHTML')
+const error = require('../utils/output/error')
+const exit = require('../utils/exit')
 
 const generatePages = async (pages: Array<Object>, ctx: Object) => {
-  const { config, paths } = ctx
+  const { config } = ctx
 
   const output = spinner('building static html').start()
 
@@ -43,24 +45,28 @@ const generatePages = async (pages: Array<Object>, ctx: Object) => {
           site: siteData,
           ...groupedPages
         }
-        const ext = extname(page.srcFile).replace('.', '')
 
-        const renderedContent = await renderContent(
-          page.content,
-          ext,
-          data,
-          paths.layouts,
-          config.minifyContent
-        )
+        const pageHtml = await buildPageHTML(data, ctx)
 
-        await fs.writeFile(page.file, renderedContent)
+        await fs.writeFile(page.file, pageHtml)
       })
     )
 
     output.succeed()
   } catch (err) {
     output.fail()
-    logError(err)
+
+    if (err.code === 'ENOENT') {
+      const layoutName = basename(err.path, '.html')
+      error(`Layout "${layoutName}" could not be found.`)
+    } else {
+      error(
+        'An unexpected error occured while generating the pages.',
+        err.message
+      )
+    }
+
+    exit(1)
   }
 }
 

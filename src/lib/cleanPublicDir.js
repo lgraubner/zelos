@@ -2,7 +2,8 @@
 const fs = require('fs-extra')
 const spinner = require('ora')
 
-const logError = require('../utils/logError')
+const exit = require('../utils/exit')
+const error = require('../utils/output/error')
 
 const cleanPublicDir = async (ctx: Object) => {
   const output = spinner('cleaning public folder').start()
@@ -11,7 +12,11 @@ const cleanPublicDir = async (ctx: Object) => {
     output.succeed()
   } catch (err) {
     output.fail()
-    logError(err)
+    error(
+      'An unexpected error occurred while cleaning the public folder.',
+      err.message
+    )
+    exit(1)
   }
 }
 
