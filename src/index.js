@@ -49,7 +49,7 @@ const main = async (argv_: string[]) => {
 
   if (!command) {
     if (argv.version) {
-      console.log(pkg.version)
+      plain(pkg.version)
       return 0
     }
 

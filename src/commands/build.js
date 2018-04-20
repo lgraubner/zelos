@@ -16,6 +16,7 @@ const generateRSSFeed = require('../lib/generateRSSFeed')
 const formatExecutionTime = require('../utils/formatExecutionTime')
 const plain = require('../utils/output/plain')
 const info = require('../utils/output/info')
+const exit = require('../utils/exit')
 
 const help = () => {
   plain(`
@@ -24,45 +25,50 @@ const help = () => {
   Options:
 
     -h, --help      Display help
+    -d, --drafts    Include drafts
 `)
 }
 
 const main = async (ctx: Object): Promise<any> => {
   const startTime = process.hrtime()
 
-  const { config, argv } = ctx
+  const { config } = ctx
 
-  const argv_ = mri(argv.slice(1), {
-    boolean: ['help'],
+  const argv = mri(ctx.argv.slice(1), {
+    boolean: ['help', 'drafts'],
     alias: {
-      help: 'h'
+      help: 'h',
+      drafts: 'd'
     }
   })
 
-  // @TODO: extend config
-
-  if (argv_.help) {
-    help()
-    return 0
+  const childCtx = {
+    ...ctx,
+    argv
   }
 
-  await cleanPublicDir(ctx)
+  if (argv.help) {
+    help()
+    exit(0)
+  }
 
-  await copyStaticFiles(ctx)
+  await cleanPublicDir(childCtx)
 
-  const pages = await scanPages(ctx)
-  await generatePages(pages, ctx)
+  await copyStaticFiles(childCtx)
+
+  const pages = await scanPages(childCtx)
+  await generatePages(pages, childCtx)
 
   if (config.rss) {
-    await generateRSSFeed(pages, ctx)
+    await generateRSSFeed(pages, childCtx)
   }
 
   if (config.sitemap) {
-    await generateSitemap(pages, ctx)
+    await generateSitemap(pages, childCtx)
   }
 
   if (config.serviceWorker) {
-    await generateServiceWorker(ctx)
+    await generateServiceWorker(childCtx)
   }
 
   const endTime = process.hrtime(startTime)

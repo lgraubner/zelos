@@ -1,6 +1,7 @@
 ---
 type: post
 url: /im-a-post
+draft: true
 ---
 
 # Das ist ein Test

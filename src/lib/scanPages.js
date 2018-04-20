@@ -8,14 +8,15 @@ const getUrlPath = require('../utils/getUrlPath')
 const parseFile = require('../utils/parseFile')
 const error = require('../utils/output/error')
 const exit = require('../utils/exit')
+const filterDrafts = require('../utils/filterDrafts')
 
 const scanPages = async (ctx: Object): Promise<any> => {
-  const { paths, config } = ctx
+  const { paths, config, argv } = ctx
 
   const files = glob.sync(`${paths.pages}/**/*.{md,html}`)
 
-  return Promise.all(
-    files.map(async filePath => {
+  const pages = await Promise.all(
+    files.map(async (filePath: string) => {
       debug('found file %s', filePath)
       try {
         const { frontmatter, content } = await parseFile(filePath)
@@ -46,6 +47,12 @@ const scanPages = async (ctx: Object): Promise<any> => {
       }
     })
   )
+
+  if (!argv.drafts) {
+    return filterDrafts(pages)
+  }
+
+  return pages
 }
 
 module.exports = scanPages

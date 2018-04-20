@@ -8,7 +8,6 @@ const defaultConfig = {
   pagesDir: 'pages',
   defaultLayout: 'default',
   defaultPageType: 'page',
-  drafts: false,
   layoutDir: 'layouts',
   minifyContent: true,
   publicDir: 'public',
