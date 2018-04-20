@@ -3,13 +3,11 @@ const mri = require('mri')
 // $FlowFixMe
 const { bold, gray } = require('chalk')
 const debug = require('debug')('zelos:main')
-const { resolve } = require('path')
 const updateNotifier = require('update-notifier')
 
 const pkg = require('../package')
 
 const commands = require('./commands')
-const createConfig = require('./lib/createConfig')
 
 const exit = require('./utils/exit')
 const error = require('./utils/output/error')
@@ -64,33 +62,13 @@ const main = async (argv_: string[]) => {
     debug('Falling back to default command %s', command)
   }
 
-  let config = {}
-
-  if (command !== 'new') {
-    config = await createConfig()
-  }
-
   if (!availableCommands.has(command)) {
     error(`Command "${command}" not found.`)
     exit(1)
   }
 
-  const cwd = process.cwd()
-
-  const ctx = {
-    argv: argv_,
-    config,
-    paths: {
-      cwd,
-      public: resolve(cwd, config.publicDir),
-      static: resolve(cwd, config.staticDir),
-      pages: resolve(cwd, config.pagesDir),
-      layouts: resolve(cwd, config.layoutDir)
-    }
-  }
-
   // execute command
-  commands[command](ctx)
+  commands[command](argv_.slice(1))
 
   updateNotifier({ pkg }).notify()
 }

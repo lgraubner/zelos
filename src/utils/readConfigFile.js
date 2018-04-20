@@ -4,7 +4,12 @@ const { resolve } = require('path')
 
 const readConfigFile = async (): Promise<any> => {
   const configPath = resolve(process.cwd(), 'config.json')
-  return fs.readJson(configPath)
+  try {
+    const config = await fs.readJson(configPath)
+    return config
+  } catch (err) {
+    return {}
+  }
 }
 
 module.exports = readConfigFile

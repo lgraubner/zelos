@@ -11,7 +11,7 @@ const exit = require('../utils/exit')
 const filterDrafts = require('../utils/filterDrafts')
 
 const scanPages = async (ctx: Object): Promise<any> => {
-  const { paths, config, argv } = ctx
+  const { paths, config } = ctx
 
   const files = glob.sync(`${paths.pages}/**/*.{md,html}`)
 
@@ -48,7 +48,7 @@ const scanPages = async (ctx: Object): Promise<any> => {
     })
   )
 
-  if (!argv.drafts) {
+  if (!config.drafts) {
     return filterDrafts(pages)
   }
 
