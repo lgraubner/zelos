@@ -25,8 +25,9 @@ const help = () => {
 
   Options:
 
-    -h, --help      Display help
-    -d, --drafts    Include drafts
+    -h, --help            Display help
+    -d, --drafts          Include drafts
+    -c, --config [path]   Path to config
 `)
 }
 
@@ -35,19 +36,25 @@ const main = async (argv_: string[]): Promise<any> => {
 
   const argv = mri(argv_, {
     boolean: ['help', 'drafts'],
+    string: ['config'],
     alias: {
       help: 'h',
-      drafts: 'd'
+      drafts: 'd',
+      config: 'c'
+    },
+    default: {
+      config: 'config.json',
+      drafts: false
     }
   })
-
-  const ctx = await createContext(argv)
-  const { config } = ctx
 
   if (argv.help) {
     help()
     exit(0)
   }
+
+  const ctx = await createContext(argv)
+  const { config } = ctx
 
   await cleanPublicDir(ctx)
 

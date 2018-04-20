@@ -67,8 +67,8 @@ const main = async (argv_: string[]) => {
     exit(1)
   }
 
-  // execute command
-  commands[command](argv_.slice(1))
+  // execute command, remove command from args
+  commands[command](argv_[0] === 'command' ? argv_.slice(1) : argv_)
 
   updateNotifier({ pkg }).notify()
 }

@@ -1,6 +1,6 @@
 // @flow
 const path = require('path')
-const minify = require('html-minifier').minify
+const minifyHtml = require('html-minifier').minify
 
 const TemplateCache = require('../lib/TemplateCache')
 const compileContent = require('../utils/compileContent')
@@ -31,8 +31,8 @@ const buildPageHTML = async (
     ...data
   })
 
-  if (config.minifyContent) {
-    return minify(html, {
+  if (config.minify) {
+    return minifyHtml(html, {
       collapseBooleanAttributes: true,
       collapseWhitespace: true,
       decodeEntities: true,

@@ -14,7 +14,7 @@ const defaultConfig = {
   defaultPageType: 'page',
   drafts: false,
   layoutDir: 'layouts',
-  minifyContent: true,
+  minify: true,
   publicDir: 'public',
   rss: true,
   rssFilename: 'feed.xml',
@@ -34,9 +34,9 @@ const createContext = async (argv: Object): Object => {
     const pkgPath = resolve(process.cwd(), 'package.json')
     const [pkgConfig, localConfig] = await Promise.all([
       readPackageConfig(pkgPath),
-      readConfigFile()
+      readConfigFile(argv.config)
     ])
-    const cliConfig = transformCliConfig()
+    const cliConfig = transformCliConfig(argv)
 
     config = {
       ...defaultConfig,
@@ -61,7 +61,7 @@ const createContext = async (argv: Object): Object => {
 
   if (!config.siteUrl) {
     error(
-      'The configuration is missing the "siteUrl" option. This is required to build the site.'
+      'Could not find "siteUrl" in config. This is required to build the site.'
     )
     exit(1)
   }
