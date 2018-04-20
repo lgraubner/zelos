@@ -1,5 +1,6 @@
 // @flow
 const fs = require('fs-extra')
+// $FlowFixMe
 const parseAuthor = require('parse-author')
 
 const readPackageConfig = async (pkgPath: string): Object => {

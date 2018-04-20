@@ -59,6 +59,13 @@ const createContext = async (argv: Object): Object => {
     exit(1)
   }
 
+  if (!config.siteUrl) {
+    error(
+      'The configuration is missing the "siteUrl" option. This is required to build the site.'
+    )
+    exit(1)
+  }
+
   return {
     argv,
     config,
