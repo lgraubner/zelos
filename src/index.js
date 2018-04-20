@@ -1,7 +1,7 @@
 // @flow
 const mri = require('mri')
 // $FlowFixMe
-const { bold } = require('chalk')
+const { bold, gray } = require('chalk')
 const debug = require('debug')('zelos:main')
 const { resolve } = require('path')
 const updateNotifier = require('update-notifier')
@@ -19,12 +19,21 @@ const availableCommands = new Set(['build', 'develop', 'serve', 'new'])
 
 const help = (): void =>
   plain(`
-  ${bold(pkg.name, '-', pkg.description)}
+  ${bold(pkg.name)} [options] <command>
+
+  Options:
+
+    -V, --version   Output version number
+    -h, --help      Display help
 
   Commands:
 
-    -V, --version       Output version number
-    -h, --help          Display help
+    build           Build static files from source ${bold('(default)')}
+    develop         Start a development server
+    new             Create a new ${pkg.name} project
+    serve           Start a local server
+
+  ${gray('Type "zelos <command> --help" for more information about a command.')}
 `)
 
 const main = async (argv_: string[]) => {

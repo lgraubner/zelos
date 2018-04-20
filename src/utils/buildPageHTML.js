@@ -13,8 +13,6 @@ const buildPageHTML = async (
   const { paths, config } = ctx
   let html = compileContent(data)
 
-  console.log(page.layout)
-  // compile layout
   if (page.layout !== null) {
     const layoutPath = path.join(paths.layouts, `${page.layout}.html`)
     const template = await TemplateCache.get(layoutPath)

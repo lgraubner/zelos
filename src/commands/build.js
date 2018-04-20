@@ -1,5 +1,9 @@
 // @flow
 const mri = require('mri')
+// $FlowFixMe
+const { bold } = require('chalk')
+
+const pkg = require('../../package')
 
 const cleanPublicDir = require('../lib/cleanPublicDir')
 const copyStaticFiles = require('../lib/copyStaticFiles')
@@ -15,7 +19,11 @@ const info = require('../utils/output/info')
 
 const help = () => {
   plain(`
-  build help
+  ${bold(pkg.name)} ${bold('build')} [options]
+
+  Options:
+
+    -h, --help      Display help
 `)
 }
 
