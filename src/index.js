@@ -73,4 +73,33 @@ const main = async (argv_: string[]) => {
   updateNotifier({ pkg }).notify()
 }
 
-main(process.argv.slice(2))
+debug('start')
+
+const handleRejection = err => {
+  debug('handling rejection')
+
+  if (err) {
+    if (err instanceof Error) {
+      handleUnexpected(err)
+    } else {
+      error('An unexpected rejection occurred', err.message)
+    }
+  } else {
+    error('An unexpected empty rejection occurred')
+  }
+
+  exit(1)
+}
+
+const handleUnexpected = (err: Object) => {
+  debug('handling unexpected error')
+
+  error('An unexpected error occured!', err.message)
+
+  exit(1)
+}
+
+process.on('unhandledRejection', handleRejection)
+process.on('uncaughtException', handleUnexpected)
+
+main(process.argv.slice(2)).catch(handleUnexpected)
