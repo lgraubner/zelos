@@ -63,11 +63,20 @@ const main = async (argv_: string[]): Promise<any> => {
 
   await copyStaticFiles(ctx)
 
-  await transformScripts(ctx)
+  const scriptManifest = await transformScripts(ctx)
 
-  await processStyles(ctx)
+  const styleManifest = await processStyles(ctx)
 
   const pages = await scanPages(ctx)
+  await generatePages(
+    pages,
+    {
+      ...scriptManifest,
+      ...styleManifest
+    },
+    ctx
+  )
+
   if (config.rss) {
     await generateRSSFeed(pages, ctx)
   }
@@ -79,8 +88,6 @@ const main = async (argv_: string[]): Promise<any> => {
   if (config.serviceWorker) {
     await generateServiceWorker(ctx)
   }
-
-  await generatePages(pages, ctx)
 
   await optimizeImages(ctx)
 

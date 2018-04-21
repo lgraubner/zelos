@@ -71,7 +71,7 @@ const transformScripts = (ctx: Object) =>
         output.succeed()
 
         const manifest = res.assets.reduce((obj, chunk) => {
-          obj[chunk.chunkNames[0]] = `/${chunk.name}`
+          obj[`${chunk.chunkNames[0]}.js`] = `/${chunk.name}`
           return obj
         }, {})
 

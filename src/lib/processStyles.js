@@ -37,12 +37,17 @@ const processStyles = async (ctx: Object) => {
         .then(async (result: Object) => {
           const hash = crypto.createHash('md5')
           hash.update(result.css)
-          const destPath = resolve(
-            paths.public,
-            `${fileName}_${hash.digest('hex').slice(0, 20)}.css`
-          )
+
+          const hashFileName = `${fileName}_${hash
+            .digest('hex')
+            .slice(0, 20)}.css`
+          const destPath = resolve(paths.public, hashFileName)
+
+          obj[`${fileName}.css`] = hashFileName
           await fs.outputFile(destPath, result.css)
         })
+
+      return obj
     }, {})
 
     output.succeed()

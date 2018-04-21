@@ -12,7 +12,12 @@ const buildPageHTML = require('../utils/buildPageHTML')
 const error = require('../utils/output/error')
 const exit = require('../utils/exit')
 
-const generatePages = async (pages: Array<Object>, ctx: Object) => {
+const generatePages = async (
+  pages: Array<Object>,
+  manifest: Object,
+  ctx: Object
+) => {
+  console.log(manifest)
   const { config } = ctx
 
   const output = spinner('building pages').start()
@@ -32,7 +37,8 @@ const generatePages = async (pages: Array<Object>, ctx: Object) => {
     ]),
     rssLink: resolve(config.siteUrl, config.rssFilename),
     serviceWorkerLink: resolve(config.siteUrl, 'sw.js'),
-    sitemapLink: resolve(config.siteUrl, 'sitemap.xml')
+    sitemapLink: resolve(config.siteUrl, 'sitemap.xml'),
+    manifest
   }
 
   try {
