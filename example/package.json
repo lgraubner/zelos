@@ -16,5 +16,10 @@
   },
   "zelosConfig": {
     "drafts": true
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "sourceType": "module"
+    }
   }
 }

@@ -30,7 +30,6 @@ const help = () => {
 
     -h, --help            Display help
     -d, --drafts          Include drafts
-    -c, --config [path]   Path to config
 `)
 }
 
@@ -39,14 +38,11 @@ const main = async (argv_: string[]): Promise<any> => {
 
   const argv = mri(argv_, {
     boolean: ['help', 'drafts'],
-    string: ['config'],
     alias: {
       help: 'h',
-      drafts: 'd',
-      config: 'c'
+      drafts: 'd'
     },
     default: {
-      config: 'config.json',
       drafts: false
     }
   })

@@ -35,7 +35,7 @@ const createContext = async (argv: Object): Object => {
     const pkgPath = resolve(process.cwd(), 'package.json')
     const [pkgConfig, localConfig] = await Promise.all([
       readPackageConfig(pkgPath),
-      readConfigFile(argv.config)
+      readConfigFile()
     ])
     const cliConfig = transformCliConfig(argv)
 

@@ -7,5 +7,7 @@
   "params": {
     "foo": "bar"
   },
-  "drafts": false
+  "siteUrl": "https://largraubner.com",
+  "drafts": false,
+  "minify": false
 }
