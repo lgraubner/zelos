@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 import pkg from '../../package'
 
 console.log(`Version ${pkg.version}`)

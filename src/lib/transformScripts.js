@@ -11,7 +11,7 @@ const plain = require('../utils/output/plain')
 
 const transformScripts = (ctx: Object) =>
   new Promise(async (resolve: Function) => {
-    const { paths } = ctx
+    const { paths, config } = ctx
 
     const srcPath = path.resolve(paths.assets, 'js')
     const srcFiles = glob.sync(`${srcPath}/*.js`)
@@ -26,6 +26,11 @@ const transformScripts = (ctx: Object) =>
 
     const output = spinner('transforming js')
 
+    const plugins = []
+    if (config.minify) {
+      plugins.push(new UglifyJsPlugin())
+    }
+
     webpack(
       {
         entry: entries,
@@ -34,7 +39,7 @@ const transformScripts = (ctx: Object) =>
           path: paths.public,
           filename: '[name]_[chunkhash].js'
         },
-        mode: 'production',
+        mode: config.minify ? 'development' : 'production',
         module: {
           rules: [
             {
@@ -49,7 +54,7 @@ const transformScripts = (ctx: Object) =>
             }
           ]
         },
-        plugins: [new UglifyJsPlugin()]
+        plugins: plugins
       },
       (err, stats) => {
         if (err) {

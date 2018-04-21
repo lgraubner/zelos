@@ -13,7 +13,7 @@ const exit = require('../utils/exit')
 const error = require('../utils/output/error')
 
 const processStyles = async (ctx: Object) => {
-  const { paths } = ctx
+  const { paths, config } = ctx
 
   const srcPath = resolve(paths.assets, 'css')
   const srcFiles = glob.sync(`${srcPath}/*.css`)
@@ -31,11 +31,13 @@ const processStyles = async (ctx: Object) => {
       const cssContent = await fs.readFile(file, 'utf8')
       const fileName = basename(file, '.css')
 
-      const result = await postcss([
-        atImport,
-        cssnext({ warnForDuplicates: false }),
-        cssnano
-      ]).process(cssContent, {
+      const plugins = [atImport, cssnext({ warnForDuplicates: false })]
+
+      if (config.minify) {
+        plugins.push(cssnano)
+      }
+
+      const result = await postcss(plugins).process(cssContent, {
         from: file,
         to: `${paths.public}/${fileName}.css`
       })
