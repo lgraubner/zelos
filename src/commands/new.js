@@ -1,14 +1,23 @@
+// @flow
 const mri = require('mri')
 const fs = require('fs-extra')
 const { resolve } = require('path')
+const pkg = require('../../package')
+// $FlowFixMe
+const { bold } = require('chalk')
 
 const error = require('../utils/output/error')
 const info = require('../utils/output/info')
 const exit = require('../utils/exit')
+const plain = require('../utils/output/plain')
 
 const help = () => {
-  console.log(`
+  plain(`
+  ${bold(pkg.name)} ${bold('new')} [options] <dir>
 
+  Options:
+
+    -h, --help            Display help
 `)
 }
 
@@ -17,8 +26,8 @@ const configContent = `module.exports = {
 }
 `
 
-const main = async ctx => {
-  const argv = mri(ctx.argv.slice(1), {
+const main = async (argv_: string[]) => {
+  const argv = mri(argv_, {
     boolean: ['help'],
     alias: {
       help: 'h'
@@ -34,8 +43,6 @@ const main = async ctx => {
   if (!target) {
     target = '.'
   }
-
-  console.log('')
 
   const projectPath = resolve(process.cwd(), target)
 

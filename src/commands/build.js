@@ -71,8 +71,8 @@ const main = async (argv_: string[]): Promise<any> => {
   await generatePages(
     pages,
     {
-      ...scriptManifest,
-      ...styleManifest
+      js: scriptManifest,
+      css: styleManifest
     },
     ctx
   )

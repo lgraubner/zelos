@@ -46,7 +46,7 @@ const processStyles = async (ctx: Object) => {
       const hashFileName = `${fileName}_${hash.digest('hex').slice(0, 20)}.css`
       const destPath = resolve(paths.public, hashFileName)
 
-      manifest[`${fileName}.css`] = `/${hashFileName}`
+      manifest[fileName] = `/${hashFileName}`
       await fs.outputFile(destPath, result.css)
     }
 
