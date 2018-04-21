@@ -60,13 +60,6 @@ const createContext = async (argv: Object): Object => {
     exit(1)
   }
 
-  if (!config.siteUrl) {
-    error(
-      'Could not find "siteUrl" in config. This is required to build the site.'
-    )
-    exit(1)
-  }
-
   return {
     argv,
     config,

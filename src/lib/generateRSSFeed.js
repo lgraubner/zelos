@@ -6,12 +6,22 @@ const spinner = require('ora')
 const { resolve } = require('url')
 
 const error = require('../utils/output/error')
+const info = require('../utils/output/info')
 const exit = require('../utils/exit')
 
 const generateRSSFeed = async (pages: Object[], ctx: Object): Promise<any> => {
   const { paths, config } = ctx
 
   const output = spinner('generating RSS feed').start()
+
+  if (!config.siteUrl) {
+    output.fail()
+    info(
+      'Could not find "siteUrl" in config. This is required to generate the RSS feed.'
+    )
+    return
+  }
+
   const feed = new RSS({
     title: config.siteName,
     description: config.description,

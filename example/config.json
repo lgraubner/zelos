@@ -1,7 +1,6 @@
 {
   "siteName": "Lars blog",
   "description": "Hello foo bar bla",
-  "siteUrl": "https://larsgraubner.com",
   "author": {
     "name": "Lars Graubner"
   },

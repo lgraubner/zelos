@@ -2,7 +2,6 @@
 const glob = require('glob')
 const debug = require('debug')('zelos:scanPages')
 const path = require('path')
-const url = require('url')
 
 const getUrlPath = require('../utils/getUrlPath')
 const parseFile = require('../utils/parseFile')
@@ -34,7 +33,7 @@ const scanPages = async (ctx: Object): Promise<any> => {
           srcFile: filePath,
           file,
           ...frontmatter,
-          url: url.resolve(config.siteUrl, urlPath),
+          urlPath,
           content,
           contentType
         }
