@@ -14,7 +14,7 @@ const processCSS = async (ctx: Object) => {
   const { paths } = ctx
 
   const srcPath = resolve(paths.assets, 'css/main.css')
-  const destPath = resolve(paths.public, 'css/app.css')
+  const destPath = resolve(paths.public, 'app.css')
 
   try {
     const cssContent = await fs.readFile(srcPath, 'utf8')

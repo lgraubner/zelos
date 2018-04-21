@@ -11,7 +11,7 @@ const transformJS = (ctx: Object) =>
   new Promise(async (resolve: Function) => {
     const { paths } = ctx
     const srcPath = path.resolve(paths.assets, 'js/main.js')
-    const destPath = path.resolve(paths.public, 'js/app.js')
+    const destPath = path.resolve(paths.public, 'app.js')
 
     try {
       await fs.ensureDir(path.dirname(destPath))
