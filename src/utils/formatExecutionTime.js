@@ -7,7 +7,7 @@ const formatExecutionTime = (
   endTime: [number, number]
 ): string => {
   // convert to ms and round
-  const nanoTime = Math.ceil(nanoseconds(endTime) / 1e9)
+  const nanoTime = Math.ceil(nanoseconds(endTime) / 1e6)
 
   return prettyMs(nanoTime)
 }

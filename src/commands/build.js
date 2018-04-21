@@ -13,6 +13,9 @@ const generateSitemap = require('../lib/generateSitemap')
 const generateServiceWorker = require('../lib/generateServiceWorker')
 const generateRSSFeed = require('../lib/generateRSSFeed')
 const createContext = require('../lib/createContext')
+const optimizeImages = require('../lib/optimizeImages')
+const processCSS = require('../lib/processCSS')
+const transformJS = require('../lib/transformJS')
 
 const formatExecutionTime = require('../utils/formatExecutionTime')
 const plain = require('../utils/output/plain')
@@ -62,6 +65,12 @@ const main = async (argv_: string[]): Promise<any> => {
 
   const pages = await scanPages(ctx)
   await generatePages(pages, ctx)
+
+  await transformJS(ctx)
+
+  await processCSS(ctx)
+
+  await optimizeImages(ctx)
 
   if (config.rss) {
     await generateRSSFeed(pages, ctx)

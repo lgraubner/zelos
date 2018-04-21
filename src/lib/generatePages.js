@@ -15,7 +15,7 @@ const exit = require('../utils/exit')
 const generatePages = async (pages: Array<Object>, ctx: Object) => {
   const { config } = ctx
 
-  const output = spinner('building static html').start()
+  const output = spinner('building pages').start()
 
   const groupedPages = groupBy(pages, page => pluralize(page.type))
 

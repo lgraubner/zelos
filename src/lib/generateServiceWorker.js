@@ -15,7 +15,7 @@ const generateServiceWorker = async (ctx: Object) => {
 
   try {
     await swPrecache.write(swPath, {
-      staticFileGlobs: [`${paths.public}/**/*`],
+      staticFileGlobs: [`${paths.public}/**/*.{html,css,js,xml}`],
       stripPrefix: paths.public,
       logger: (msg: string) => {
         output.succeed()

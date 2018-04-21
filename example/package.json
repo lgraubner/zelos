@@ -11,7 +11,9 @@
   "devDependencies": {
     "waait": "1.0.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "tachyons": "4.9.1"
+  },
   "zelosConfig": {
     "drafts": true
   }
