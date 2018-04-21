@@ -77,6 +77,8 @@ const main = async (argv_: string[]): Promise<any> => {
     ctx
   )
 
+  await optimizeImages(ctx)
+
   if (config.rss) {
     await generateRSSFeed(pages, ctx)
   }
@@ -88,8 +90,6 @@ const main = async (argv_: string[]): Promise<any> => {
   if (config.serviceWorker) {
     await generateServiceWorker(ctx)
   }
-
-  await optimizeImages(ctx)
 
   const endTime = process.hrtime(startTime)
   const executionTime = formatExecutionTime(startTime, endTime)

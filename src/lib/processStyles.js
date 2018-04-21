@@ -25,30 +25,30 @@ const processStyles = async (ctx: Object) => {
   const output = spinner('processing CSS').start()
 
   try {
-    const manifest = await srcFiles.reduce(async (obj, file) => {
+    const manifest = {}
+
+    for (let file of srcFiles) {
       const cssContent = await fs.readFile(file, 'utf8')
       const fileName = basename(file, '.css')
 
-      await postcss([atImport, cssnext({ warnForDuplicates: false }), cssnano])
-        .process(cssContent, {
-          from: file,
-          to: `${paths.public}/${fileName}.css`
-        })
-        .then(async (result: Object) => {
-          const hash = crypto.createHash('md5')
-          hash.update(result.css)
+      const result = await postcss([
+        atImport,
+        cssnext({ warnForDuplicates: false }),
+        cssnano
+      ]).process(cssContent, {
+        from: file,
+        to: `${paths.public}/${fileName}.css`
+      })
 
-          const hashFileName = `${fileName}_${hash
-            .digest('hex')
-            .slice(0, 20)}.css`
-          const destPath = resolve(paths.public, hashFileName)
+      const hash = await crypto.createHash('md5')
+      hash.update(result.css)
 
-          obj[`${fileName}.css`] = hashFileName
-          await fs.outputFile(destPath, result.css)
-        })
+      const hashFileName = `${fileName}_${hash.digest('hex').slice(0, 20)}.css`
+      const destPath = resolve(paths.public, hashFileName)
 
-      return obj
-    }, {})
+      manifest[`${fileName}.css`] = `/${hashFileName}`
+      await fs.outputFile(destPath, result.css)
+    }
 
     output.succeed()
     return manifest

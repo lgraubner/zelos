@@ -4,7 +4,6 @@ const groupBy = require('lodash/groupBy')
 const pluralize = require('pluralize')
 const { dirname } = require('path')
 const pick = require('lodash/pick')
-const { resolve } = require('url')
 const spinner = require('ora')
 const { basename } = require('path')
 
@@ -17,7 +16,6 @@ const generatePages = async (
   manifest: Object,
   ctx: Object
 ) => {
-  console.log(manifest)
   const { config } = ctx
 
   const output = spinner('building pages').start()
@@ -35,9 +33,9 @@ const generatePages = async (
       'description',
       'params'
     ]),
-    rssLink: resolve(config.siteUrl, config.rssFilename),
-    serviceWorkerLink: resolve(config.siteUrl, 'sw.js'),
-    sitemapLink: resolve(config.siteUrl, 'sitemap.xml'),
+    rssLink: `/${config.rssFilename}`,
+    serviceWorkerLink: '/sw.js',
+    sitemapLink: '/sitemap.xml',
     manifest
   }
 
