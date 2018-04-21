@@ -6,9 +6,16 @@ const exit = require('../utils/exit')
 const error = require('../utils/output/error')
 
 const cleanPublicDir = async (ctx: Object) => {
+  const { paths } = ctx
+  const exists = await fs.pathExists(paths.public)
+  if (!exists) {
+    return
+  }
+
   const output = spinner('cleaning public folder').start()
+
   try {
-    await fs.emptyDir(ctx.paths.public)
+    await fs.emptyDir(paths.public)
     output.succeed()
   } catch (err) {
     output.fail()

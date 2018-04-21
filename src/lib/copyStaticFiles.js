@@ -6,9 +6,15 @@ const error = require('../utils/output/error')
 const exit = require('../utils/exit')
 
 const copyStaticFiles = async (ctx: Object) => {
+  const { paths } = ctx
+  const exists = await fs.pathExists(paths.static)
+  if (!exists) {
+    return
+  }
+
   const output = spinner('copying static files').start()
   try {
-    fs.copy(ctx.paths.static, ctx.paths.public)
+    fs.copy(paths.static, paths.public)
     output.succeed()
   } catch (err) {
     output.fail()
