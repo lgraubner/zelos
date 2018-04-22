@@ -10,7 +10,7 @@ const transformCliConfig = require('../utils/transformCliConfig')
 
 const defaultConfig = {
   assetDir: 'assets',
-  pagesDir: 'pages',
+  contentDir: 'content',
   defaultLayout: 'default',
   defaultPageType: 'page',
   drafts: false,
@@ -67,7 +67,7 @@ const createContext = async (argv: Object): Object => {
       cwd,
       public: resolve(cwd, config.publicDir),
       static: resolve(cwd, config.staticDir),
-      pages: resolve(cwd, config.pagesDir),
+      pages: resolve(cwd, config.contentDir),
       layouts: resolve(cwd, config.layoutDir),
       assets: resolve(cwd, config.assetDir)
     }

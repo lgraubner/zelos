@@ -1,88 +1,62 @@
 // @flow
 const path = require('path')
-const spinner = require('ora')
-const webpack = require('webpack')
+const { promisify } = require('util')
+const webpack = promisify(require('webpack'))
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const glob = require('glob')
+const glob = require('globby')
 
-const exit = require('../utils/exit')
-const error = require('../utils/output/error')
-const plain = require('../utils/output/plain')
+const transformScripts = async (ctx: Object) => {
+  const { paths, config } = ctx
 
-const transformScripts = (ctx: Object) =>
-  new Promise(async (resolve: Function) => {
-    const { paths, config } = ctx
+  const srcPath = path.resolve(paths.assets, 'js')
+  const srcFiles = await glob(`${srcPath}/*.js`)
+  const entries = srcFiles.reduce((obj, file) => {
+    obj[path.basename(file, '.js')] = file
+    return obj
+  }, {})
 
-    const srcPath = path.resolve(paths.assets, 'js')
-    const srcFiles = glob.sync(`${srcPath}/*.js`)
-    const entries = srcFiles.reduce((obj, file) => {
-      obj[path.basename(file, '.js')] = file
-      return obj
-    }, {})
+  const plugins = []
+  if (config.minify) {
+    plugins.push(new UglifyJsPlugin())
+  }
 
-    if (!srcFiles.length) {
-      return resolve({})
-    }
-
-    const output = spinner('transforming js')
-
-    const plugins = []
-    if (config.minify) {
-      plugins.push(new UglifyJsPlugin())
-    }
-
-    webpack(
-      {
-        entry: entries,
-        target: 'web',
-        output: {
-          path: paths.public,
-          filename: '[name]_[chunkhash].js'
+  const stats = await webpack({
+    entry: entries,
+    target: 'web',
+    output: {
+      path: paths.public,
+      filename: '[name]_[chunkhash].js'
+    },
+    mode: config.minify ? 'development' : 'production',
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loaders: ['babel-loader']
         },
-        mode: config.minify ? 'development' : 'production',
-        module: {
-          rules: [
-            {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              loaders: ['babel-loader']
-            },
-            {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              loader: 'eslint-loader'
-            }
-          ]
-        },
-        plugins: plugins
-      },
-      (err, stats) => {
-        if (err) {
-          error(
-            'An unexpected error occured while transforming js.',
-            err.message
-          )
-          exit(1)
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'eslint-loader'
         }
-
-        if (stats.hasErrors()) {
-          output.fail()
-          plain(stats.toString('errors-only'))
-          exit(1)
-        }
-
-        const res = stats.toJson()
-
-        output.succeed()
-
-        const manifest = res.assets.reduce((obj, chunk) => {
-          obj[chunk.chunkNames[0]] = `/${chunk.name}`
-          return obj
-        }, {})
-
-        resolve(manifest)
-      }
-    )
+      ]
+    },
+    plugins: plugins
   })
+
+  if (stats.hasErrors()) {
+    throw new Error(stats.toString('errors-only'))
+  }
+
+  const res = stats.toJson()
+
+  const manifest = res.assets.reduce((obj, chunk) => {
+    obj[chunk.chunkNames[0]] = `/${chunk.name}`
+    return obj
+  }, {})
+
+  return manifest
+}
 
 module.exports = transformScripts

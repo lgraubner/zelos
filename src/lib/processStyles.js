@@ -5,39 +5,30 @@ const { resolve, basename } = require('path')
 const cssnano = require('cssnano')
 const atImport = require('postcss-import')
 const cssnext = require('postcss-cssnext')
-const spinner = require('ora')
 const crypto = require('crypto')
-const glob = require('glob')
+const glob = require('globby')
 
-const exit = require('../utils/exit')
-const error = require('../utils/output/error')
-
-const processStyles = async (ctx: Object) => {
+const processStyles = async (ctx: Object): Promise<any> => {
   const { paths, config } = ctx
 
   const srcPath = resolve(paths.assets, 'css')
-  const srcFiles = glob.sync(`${srcPath}/*.css`)
+  const srcFiles = await glob(`${srcPath}/*.css`)
 
-  if (!srcFiles.length) {
-    return resolve({})
+  const plugins = [atImport, cssnext({ warnForDuplicates: false })]
+
+  if (config.minify) {
+    plugins.push(cssnano)
   }
 
-  const output = spinner('processing CSS').start()
+  const transformer = postcss(plugins)
 
-  try {
-    const manifest = {}
-
-    for (let file of srcFiles) {
+  const manifest = {}
+  await Promise.all(
+    srcFiles.map(async file => {
       const cssContent = await fs.readFile(file, 'utf8')
       const fileName = basename(file, '.css')
 
-      const plugins = [atImport, cssnext({ warnForDuplicates: false })]
-
-      if (config.minify) {
-        plugins.push(cssnano)
-      }
-
-      const result = await postcss(plugins).process(cssContent, {
+      const result = await transformer.process(cssContent, {
         from: file,
         to: `${paths.public}/${fileName}.css`
       })
@@ -49,16 +40,11 @@ const processStyles = async (ctx: Object) => {
       const destPath = resolve(paths.public, hashFileName)
 
       manifest[fileName] = `/${hashFileName}`
-      await fs.outputFile(destPath, result.css)
-    }
+      return fs.outputFile(destPath, result.css)
+    })
+  )
 
-    output.succeed()
-    return manifest
-  } catch (err) {
-    output.fail()
-    error('An unexpected error occured while processing css.', err.message)
-    exit(1)
-  }
+  return manifest
 }
 
 module.exports = processStyles

@@ -58,7 +58,7 @@ const main = async (argv_: string[]) => {
   }
 
   const layoutDir = resolve(projectPath, 'layouts')
-  const pagesDir = resolve(projectPath, 'pages')
+  const contentDir = resolve(projectPath, 'pages')
   const staticDir = resolve(projectPath, 'static')
 
   const configPath = resolve(projectPath, 'config.js')
@@ -69,7 +69,7 @@ const main = async (argv_: string[]) => {
   // create directories
   await Promise.all([
     fs.ensureDir(layoutDir),
-    fs.ensureDir(pagesDir),
+    fs.ensureDir(contentDir),
     fs.ensureDir(staticDir),
     fs.writeFile(configPath, configContent)
   ])

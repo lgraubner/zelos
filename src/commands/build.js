@@ -2,18 +2,19 @@
 const mri = require('mri')
 // $FlowFixMe
 const { bold } = require('chalk')
+const spinner = require('ora')
 
 const pkg = require('../../package')
 
 const cleanPublicDir = require('../lib/cleanPublicDir')
 const copyStaticFiles = require('../lib/copyStaticFiles')
 const scanPages = require('../lib/scanPages')
-const generatePages = require('../lib/generatePages')
-const generateSitemap = require('../lib/generateSitemap')
-const generateServiceWorker = require('../lib/generateServiceWorker')
-const generateRSSFeed = require('../lib/generateRSSFeed')
+const createPages = require('../lib/createPages')
+const createSitemap = require('../lib/createSitemap')
+const createServiceWorker = require('../lib/createServiceWorker')
+const createRSSFeed = require('../lib/createRSSFeed')
 const createContext = require('../lib/createContext')
-const optimizeImages = require('../lib/optimizeImages')
+// const optimizeImages = require('../lib/optimizeImages')
 const processStyles = require('../lib/processStyles')
 const transformScripts = require('../lib/transformScripts')
 
@@ -21,6 +22,7 @@ const formatExecutionTime = require('../utils/formatExecutionTime')
 const plain = require('../utils/output/plain')
 const info = require('../utils/output/info')
 const exit = require('../utils/exit')
+const error = require('../utils/output/error')
 
 const help = () => {
   plain(`
@@ -52,39 +54,80 @@ const main = async (argv_: string[]): Promise<any> => {
     exit(0)
   }
 
+  let output = spinner()
+
   const ctx = await createContext(argv)
   const { config } = ctx
 
+  output.start('Collecting page data')
+  const pages = await scanPages(ctx)
+  output.succeed()
+
   await cleanPublicDir(ctx)
+  output.succeed('Cleaning public dir')
 
   await copyStaticFiles(ctx)
+  output.succeed('Copying static file')
 
-  const scriptManifest = await transformScripts(ctx)
+  let styleManifest
+  try {
+    output.start('Building CSS')
+    styleManifest = await processStyles(ctx)
+    output.succeed()
+  } catch (err) {
+    output.fail()
+  }
 
-  const styleManifest = await processStyles(ctx)
+  let scriptManifest
+  try {
+    output.start('Building JavaScript bundles')
+    scriptManifest = await transformScripts(ctx)
+    output.succeed()
+  } catch (err) {
+    output.fail()
+    if (err instanceof Error) {
+      error('An error occured while transforming js.', err.message)
+      exit(1)
+    }
+  }
 
-  const pages = await scanPages(ctx)
-  await generatePages(
-    pages,
-    {
-      js: scriptManifest,
-      css: styleManifest
-    },
-    ctx
-  )
+  try {
+    output.start('Creating static pages')
+    await createPages(
+      pages,
+      {
+        js: scriptManifest,
+        css: styleManifest
+      },
+      ctx
+    )
+    output.succeed()
+  } catch (err) {
+    output.fail()
+  }
 
-  await optimizeImages(ctx)
+  // await optimizeImages(ctx).then(() => output.succeed())
 
   if (config.rss) {
-    await generateRSSFeed(pages, ctx)
+    try {
+      output.start('Creating RSS feed')
+      await createRSSFeed(pages, ctx)
+    } catch (err) {
+      output.fail()
+      error(err)
+    }
   }
 
   if (config.sitemap) {
-    await generateSitemap(pages, ctx)
+    output.start('Creating sitemap')
+    await createSitemap(pages, ctx)
+    output.succeed()
   }
 
   if (config.serviceWorker) {
-    await generateServiceWorker(ctx)
+    output.start('Creating service worker')
+    await createServiceWorker(ctx)
+    output.succeed()
   }
 
   const endTime = process.hrtime(startTime)

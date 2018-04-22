@@ -1,5 +1,5 @@
 // @flow
-const glob = require('glob')
+const glob = require('globby')
 const debug = require('debug')('zelos:scanPages')
 const path = require('path')
 
@@ -12,7 +12,7 @@ const filterDrafts = require('../utils/filterDrafts')
 const scanPages = async (ctx: Object): Promise<any> => {
   const { paths, config } = ctx
 
-  const files = glob.sync(`${paths.pages}/**/*.{md,html}`)
+  const files = await glob(`${paths.pages}/**/*.{md,html}`)
 
   const pages = await Promise.all(
     files.map(async (filePath: string) => {
@@ -33,7 +33,7 @@ const scanPages = async (ctx: Object): Promise<any> => {
           srcFile: filePath,
           file,
           ...frontmatter,
-          urlPath,
+          link: urlPath,
           content,
           contentType
         }

@@ -10,6 +10,7 @@ const TemplateCache = (): Object => {
       if (cache.has(filePath)) {
         return cache.get(filePath)
       }
+
       const fileContent = await fs.readFile(filePath, 'utf8')
       const template = handlebars.compile(fileContent)
       cache.set(filePath, template)

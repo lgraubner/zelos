@@ -4,6 +4,7 @@ const mri = require('mri')
 const { bold, gray } = require('chalk')
 const debug = require('debug')('zelos:main')
 const updateNotifier = require('update-notifier')
+// const blocked = require('blocked-at')
 
 const pkg = require('../package')
 
@@ -103,3 +104,13 @@ process.on('unhandledRejection', handleRejection)
 process.on('uncaughtException', handleUnexpected)
 
 main(process.argv.slice(2)).catch(handleUnexpected)
+
+// blocked(
+//   (time, stack) => {
+//     console.log(`Blocked for ${time}ms, operation started here:`, stack)
+//   },
+//   {
+//     trimFalsePositives: true,
+//     threshold: 200
+//   }
+// )
