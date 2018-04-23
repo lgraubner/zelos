@@ -39,7 +39,7 @@ Your first inclination may be to use refs to "make things happen" in your app. I
 
 Refs are created using `React.createRef()` and attached to React elements via the `ref` attribute. Refs are commonly assigned to an instance property when a component is constructed so they can be referenced throughout the component.
 
-```javascript{4,7}
+```javascript
 class MyComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -71,7 +71,7 @@ The examples below demonstrate the differences.
 
 This code uses a `ref` to store a reference to a DOM node:
 
-```javascript{5,12,22}
+```javascript
 class CustomTextInput extends React.Component {
   constructor(props) {
     super(props);
@@ -111,7 +111,7 @@ React will assign the `current` property with the DOM element when the component
 
 If we wanted to wrap the `CustomTextInput` above to simulate it being clicked immediately after mounting, we could use a ref to get access to the custom input and call its `focusTextInput` method manually:
 
-```javascript{4,8,13}
+```javascript
 class AutoFocusTextInput extends React.Component {
   constructor(props) {
     super(props);
@@ -132,7 +132,7 @@ class AutoFocusTextInput extends React.Component {
 
 Note that this only works if `CustomTextInput` is declared as a class:
 
-```js{1}
+```javascript
 class CustomTextInput extends React.Component {
   // ...
 }
@@ -142,7 +142,7 @@ class CustomTextInput extends React.Component {
 
 **You may not use the `ref` attribute on functional components** because they don't have instances:
 
-```javascript{1,8,13}
+```javascript
 function MyFunctionalComponent() {
   return <input />;
 }
@@ -165,7 +165,7 @@ You should convert the component to a class if you need a ref to it, just like y
 
 You can, however, **use the `ref` attribute inside a functional component** as long as you refer to a DOM element or a class component:
 
-```javascript{2,3,6,13}
+```javascript
 function CustomTextInput(props) {
   // textInput must be declared here so the ref can refer to it
   let textInput = React.createRef();
@@ -209,7 +209,7 @@ Instead of passing a `ref` attribute created by `createRef()`, you pass a functi
 
 The example below implements a common pattern: using the `ref` callback to store a reference to a DOM node in an instance property.
 
-```javascript{5,7-9,11-14,19,29,34}
+```javascript
 class CustomTextInput extends React.Component {
   constructor(props) {
     super(props);
@@ -255,7 +255,7 @@ React will call the `ref` callback with the DOM element when the component mount
 
 You can pass callback refs between components like you can with object refs that were created with `React.createRef()`.
 
-```javascript{4,13}
+```javascript
 function CustomTextInput(props) {
   return (
     <div>

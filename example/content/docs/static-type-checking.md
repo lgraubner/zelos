@@ -40,7 +40,7 @@ This command installs the latest version of Flow into your project.
 
 Now, add `flow` to the `"scripts"` section of your `package.json` to be able to use this from the terminal:
 
-```js{4}
+```javascript
 {
   // ...
   "scripts": {
@@ -99,7 +99,7 @@ npm install --save-dev babel-preset-flow
 
 Then add the `flow` preset to your [Babel configuration](http://babeljs.io/docs/usage/babelrc/). For example, if you configure Babel through `.babelrc` file, it could look like this:
 
-```js{3}
+```javascript
 {
   "presets": [
     "flow",
@@ -187,7 +187,7 @@ npm install --save-dev typescript
 
 Congrats! You've installed the latest version of TypeScript into your project. Installing TypeScript gives us access to the `tsc` command. Before configuration, let's add `tsc` to the "scripts" section in our `package.json`:
 
-```js{4}
+```javascript
 {
   // ...
   "scripts": {
@@ -221,7 +221,7 @@ We'll address this in two steps:
 
 * Next, we'll tell the compiler where our source code is and where the output should go.
 
-```js{6,7}
+```javascript
 // tsconfig.json
 
 {

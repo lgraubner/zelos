@@ -23,7 +23,7 @@ For example, the HTML:
 
 is slightly different in React:
 
-```js{1}
+```javascript
 <button onClick={activateLasers}>
   Activate Lasers
 </button>
@@ -39,7 +39,7 @@ Another difference is that you cannot return `false` to prevent default behavior
 
 In React, this could instead be:
 
-```js{2-5,8}
+```javascript
 function ActionLink() {
   function handleClick(e) {
     e.preventDefault();
@@ -60,7 +60,7 @@ When using React you should generally not need to call `addEventListener` to add
 
 When you define a component using an [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes), a common pattern is for an event handler to be a method on the class. For example, this `Toggle` component renders a button that lets the user toggle between "ON" and "OFF" states:
 
-```js{6,7,10-14,18}
+```javascript
 class Toggle extends React.Component {
   constructor(props) {
     super(props);
@@ -99,7 +99,7 @@ This is not React-specific behavior; it is a part of [how functions work in Java
 
 If calling `bind` annoys you, there are two ways you can get around this. If you are using the experimental [public class fields syntax](https://babeljs.io/docs/plugins/transform-class-properties/), you can use class fields to correctly bind callbacks:
 
-```js{2-6}
+```javascript
 class LoggingButton extends React.Component {
   // This syntax ensures `this` is bound within handleClick.
   // Warning: this is *experimental* syntax.
@@ -121,7 +121,7 @@ This syntax is enabled by default in [Create React App](https://github.com/faceb
 
 If you aren't using class fields syntax, you can use an [arrow function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions) in the callback:
 
-```js{7-9}
+```javascript
 class LoggingButton extends React.Component {
   handleClick() {
     console.log('this is:', this);

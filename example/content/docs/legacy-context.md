@@ -50,7 +50,7 @@ class MessageList extends React.Component {
 
 In this example, we manually thread through a `color` prop in order to style the `Button` and `Message` components appropriately. Using context, we can pass this through the tree automatically:
 
-```javascript{6,13-15,21,28-30,40-42}
+```javascript
 import PropTypes from 'prop-types';
 
 class Button extends React.Component {

@@ -16,7 +16,7 @@ The first argument (`child`) is any [renderable React child](/docs/react-compone
 
 Normally, when you return an element from a component's render method, it's mounted into the DOM as a child of the nearest parent node:
 
-```js{4,6}
+```javascript
 render() {
   // React mounts a new div and renders the children into it
   return (
@@ -29,7 +29,7 @@ render() {
 
 However, sometimes it's useful to insert a child into a different location in the DOM:
 
-```js{6}
+```javascript
 render() {
   // React does *not* create a new div. It renders the children into `domNode`.
   // `domNode` is any valid DOM node, regardless of its location in the DOM.
@@ -65,7 +65,7 @@ This includes event bubbling. An event fired from inside a portal will propagate
 
 A `Parent` component in `#app-root` would be able to catch an uncaught, bubbling event from the sibling node `#modal-root`.
 
-```js{28-31,42-49,53,61-63,70-71,74}
+```javascript
 // These two containers are siblings in the DOM
 const appRoot = document.getElementById('app-root');
 const modalRoot = document.getElementById('modal-root');

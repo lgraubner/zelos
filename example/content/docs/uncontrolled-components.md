@@ -10,7 +10,7 @@ To write an uncontrolled component, instead of writing an event handler for ever
 
 For example, this code accepts a single name in an uncontrolled component:
 
-```javascript{8,17}
+```javascript
 class NameForm extends React.Component {
   constructor(props) {
     super(props);
@@ -46,7 +46,7 @@ If it's still not clear which type of component you should use for a particular 
 
 In the React rendering lifecycle, the `value` attribute on form elements will override the value in the DOM. With an uncontrolled component, you often want React to specify the initial value, but leave subsequent updates uncontrolled. To handle this case, you can specify a `defaultValue` attribute instead of `value`.
 
-```javascript{7}
+```javascript
 render() {
   return (
     <form onSubmit={this.handleSubmit}>

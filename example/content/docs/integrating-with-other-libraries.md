@@ -22,7 +22,7 @@ We will attach a [ref](/docs/refs-and-the-dom.html) to the root DOM element. Ins
 
 To prevent React from touching the DOM after mounting, we will return an empty `<div />` from the `render()` method. The `<div />` element has no properties or children, so React has no reason to update it, leaving the jQuery plugin free to manage that part of the DOM:
 
-```js{3,4,8,12}
+```javascript
 class SomePlugin extends React.Component {
   componentDidMount() {
     this.$el = $(this.el);
@@ -71,7 +71,7 @@ We will implement it as an [uncontrolled component](/docs/uncontrolled-component
 
 First, we will create an empty component with a `render()` method where we return `<select>` wrapped in a `<div>`:
 
-```js{4,5}
+```javascript
 class Chosen extends React.Component {
   render() {
     return (
@@ -89,7 +89,7 @@ Notice how we wrapped `<select>` in an extra `<div>`. This is necessary because 
 
 Next, we will implement the lifecycle hooks. We need to initialize Chosen with the ref to the `<select>` node in `componentDidMount`, and tear it down in `componentWillUnmount`:
 
-```js{2,3,7}
+```javascript
 componentDidMount() {
   this.$el = $(this.el);
   this.$el.chosen();
@@ -112,7 +112,7 @@ This is enough to get our component to render, but we also want to be notified a
 
 We won't pass `this.props.onChange` directly to Chosen because component's props might change over time, and that includes event handlers. Instead, we will declare a `handleChange()` method that calls `this.props.onChange`, and subscribe it to the jQuery `change` event:
 
-```js{5,6,10,14-16}
+```javascript
 componentDidMount() {
   this.$el = $(this.el);
   this.$el.chosen();
@@ -137,7 +137,7 @@ Finally, there is one more thing left to do. In React, props can change over tim
 
 Chosen's documentation suggests that we can use jQuery `trigger()` API to notify it about changes to the original DOM element. We will let React take care of updating `this.props.children` inside `<select>`, but we will also add a `componentDidUpdate()` lifecycle hook that notifies Chosen about changes in the children list:
 
-```js{2,3}
+```javascript
 componentDidUpdate(prevProps) {
   if (prevProps.children !== this.props.children) {
     this.$el.trigger("chosen:updated");
@@ -229,7 +229,7 @@ ReactDOM.render(
 
 From here you could start moving more logic into the component and begin adopting more common React practices. For example, in components it is best not to rely on IDs because the same component can be rendered multiple times. Instead, we will use the [React event system](/docs/handling-events.html) and register the click handler directly on the React `<button>` element:
 
-```js{2,6,9}
+```javascript
 function Button(props) {
   return <button onClick={props.onClick}>Say Hello</button>;
 }
@@ -257,7 +257,7 @@ You can have as many such isolated components as you like, and use `ReactDOM.ren
 
 Below, we will create a Backbone view called `ParagraphView`. It will override Backbone's `render()` function to render a React `<Paragraph>` component into the DOM element provided by Backbone (`this.el`). Here, too, we are using [`ReactDOM.render()`](/docs/react-dom.html#render):
 
-```js{1,5,8,12}
+```javascript
 function Paragraph(props) {
   return <p>{props.text}</p>;
 }
@@ -293,7 +293,7 @@ Components responsible for rendering models would listen to `'change'` events, w
 
 In the example below, the `List` component renders a Backbone collection, using the `Item` component to render individual items.
 
-```js{1,7-9,12,16,24,30-32,35,39,46}
+```javascript
 class Item extends React.Component {
   constructor(props) {
     super(props);
@@ -361,7 +361,7 @@ In the example below, we will make a copy of the model's attributes to form the 
 
 Note that this example is not meant to be exhaustive with regards to working with Backbone, but it should give you an idea for how to approach this in a generic way:
 
-```js{1,5,10,14,16,17,22,26,32}
+```javascript
 function connectToBackboneModel(WrappedComponent) {
   return class BackboneComponent extends React.Component {
     constructor(props) {
@@ -401,7 +401,7 @@ function connectToBackboneModel(WrappedComponent) {
 
 To demonstrate how to use it, we will connect a `NameInput` React component to a Backbone model, and update its `firstName` attribute every time the input changes:
 
-```js{4,6,11,15,19-21}
+```javascript
 function NameInput(props) {
   return (
     <p>

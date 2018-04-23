@@ -15,7 +15,7 @@ In this section, we will create a temperature calculator that calculates whether
 
 We will start with a component called `BoilingVerdict`. It accepts the `celsius` temperature as a prop, and prints whether it is enough to boil the water:
 
-```js{3,5}
+```javascript
 function BoilingVerdict(props) {
   if (props.celsius >= 100) {
     return <p>The water would boil.</p>;
@@ -28,7 +28,7 @@ Next, we will create a component called `Calculator`. It renders an `<input>` th
 
 Additionally, it renders the `BoilingVerdict` for the current input value.
 
-```js{5,9,13,17-21}
+```javascript
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
@@ -64,7 +64,7 @@ Our new requirement is that, in addition to a Celsius input, we provide a Fahren
 
 We can start by extracting a `TemperatureInput` component from `Calculator`. We will add a new `scale` prop to it that can either be `"c"` or `"f"`:
 
-```js{1-4,19,22}
+```javascript
 const scaleNames = {
   c: 'Celsius',
   f: 'Fahrenheit'
@@ -97,7 +97,7 @@ class TemperatureInput extends React.Component {
 
 We can now change the `Calculator` to render two separate temperature inputs:
 
-```js{5,6}
+```javascript
 class Calculator extends React.Component {
   render() {
     return (
@@ -152,7 +152,7 @@ For example, `tryConvert('abc', toCelsius)` returns an empty string, and `tryCon
 
 Currently, both `TemperatureInput` components independently keep their values in the local state:
 
-```js{5,9,13}
+```javascript
 class TemperatureInput extends React.Component {
   constructor(props) {
     super(props);
@@ -179,7 +179,7 @@ Let's see how this works step by step.
 
 First, we will replace `this.state.temperature` with `this.props.temperature` in the `TemperatureInput` component. For now, let's pretend `this.props.temperature` already exists, although we will need to pass it from the `Calculator` in the future:
 
-```js{3}
+```javascript
   render() {
     // Before: const temperature = this.state.temperature;
     const temperature = this.props.temperature;
@@ -192,7 +192,7 @@ In React, this is usually solved by making a component "controlled". Just like t
 
 Now, when the `TemperatureInput` wants to update its temperature, it calls `this.props.onTemperatureChange`:
 
-```js{3}
+```javascript
   handleChange(e) {
     // Before: this.setState({temperature: e.target.value});
     this.props.onTemperatureChange(e.target.value);
@@ -207,7 +207,7 @@ The `onTemperatureChange` prop will be provided together with the `temperature` 
 
 Before diving into the changes in the `Calculator`, let's recap our changes to the `TemperatureInput` component. We have removed the local state from it, and instead of reading `this.state.temperature`, we now read `this.props.temperature`. Instead of calling `this.setState()` when we want to make a change, we now call `this.props.onTemperatureChange()`, which will be provided by the `Calculator`:
 
-```js{8,12}
+```javascript
 class TemperatureInput extends React.Component {
   constructor(props) {
     super(props);
@@ -258,7 +258,7 @@ We could have stored the value of both inputs but it turns out to be unnecessary
 
 The inputs stay in sync because their values are computed from the same state:
 
-```js{6,10,14,18-21,27-28,31-32,34}
+```javascript
 class Calculator extends React.Component {
   constructor(props) {
     super(props);

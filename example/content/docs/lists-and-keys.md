@@ -10,7 +10,7 @@ First, let's review how you transform lists in JavaScript.
 
 Given the code below, we use the [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) function to take an array of `numbers` and double their values. We assign the new array returned by `map()` to the variable `doubled` and log it:
 
-```javascript{2}
+```javascript
 const numbers = [1, 2, 3, 4, 5];
 const doubled = numbers.map((number) => number * 2);
 console.log(doubled);
@@ -26,7 +26,7 @@ You can build collections of elements and [include them in JSX](/docs/introducin
 
 Below, we loop through the `numbers` array using the JavaScript [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) function. We return an `<li>` element for each item. Finally, we assign the resulting array of elements to `listItems`:
 
-```javascript{2-4}
+```javascript
 const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
   <li>{number}</li>
@@ -35,7 +35,7 @@ const listItems = numbers.map((number) =>
 
 We include the entire `listItems` array inside a `<ul>` element, and [render it to the DOM](/docs/rendering-elements.html#rendering-an-element-into-the-dom):
 
-```javascript{2}
+```javascript
 ReactDOM.render(
   <ul>{listItems}</ul>,
   document.getElementById('root')
@@ -52,7 +52,7 @@ Usually you would render lists inside a [component](/docs/components-and-props.h
 
 We can refactor the previous example into a component that accepts an array of `numbers` and outputs an unordered list of elements.
 
-```javascript{3-5,7,13}
+```javascript
 function NumberList(props) {
   const numbers = props.numbers;
   const listItems = numbers.map((number) =>
@@ -74,7 +74,7 @@ When you run this code, you'll be given a warning that a key should be provided 
 
 Let's assign a `key` to our list items inside `numbers.map()` and fix the missing key issue.
 
-```javascript{4}
+```javascript
 function NumberList(props) {
   const numbers = props.numbers;
   const listItems = numbers.map((number) =>
@@ -100,7 +100,7 @@ ReactDOM.render(
 
 Keys help React identify which items have changed, are added, or are removed. Keys should be given to the elements inside the array to give the elements a stable identity:
 
-```js{3}
+```javascript
 const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
   <li key={number.toString()}>
@@ -111,7 +111,7 @@ const listItems = numbers.map((number) =>
 
 The best way to pick a key is to use a string that uniquely identifies a list item among its siblings. Most often you would use IDs from your data as keys:
 
-```js{2}
+```javascript
 const todoItems = todos.map((todo) =>
   <li key={todo.id}>
     {todo.text}
@@ -121,7 +121,7 @@ const todoItems = todos.map((todo) =>
 
 When you don't have stable IDs for rendered items, you may use the item index as a key as a last resort:
 
-```js{2,3}
+```javascript
 const todoItems = todos.map((todo, index) =>
   // Only do this if items have no stable IDs
   <li key={index}>
@@ -142,7 +142,7 @@ For example, if you [extract](/docs/components-and-props.html#extracting-compone
 
 **Example: Incorrect Key Usage**
 
-```javascript{4,5,14,15}
+```javascript
 function ListItem(props) {
   const value = props.value;
   return (
@@ -175,7 +175,7 @@ ReactDOM.render(
 
 **Example: Correct Key Usage**
 
-```javascript{2,3,9,10}
+```javascript
 function ListItem(props) {
   // Correct! There is no need to specify the key here:
   return <li>{props.value}</li>;
@@ -210,7 +210,7 @@ A good rule of thumb is that elements inside the `map()` call need keys.
 
 Keys used within arrays should be unique among their siblings. However they don't need to be globally unique. We can use the same keys when we produce two different arrays:
 
-```js{2,5,11,12,19,21}
+```javascript
 function Blog(props) {
   const sidebar = (
     <ul>
@@ -250,7 +250,7 @@ ReactDOM.render(
 
 Keys serve as a hint to React but they don't get passed to your components. If you need the same value in your component, pass it explicitly as a prop with a different name:
 
-```js{3,4}
+```javascript
 const content = posts.map((post) =>
   <Post
     key={post.id}
@@ -265,7 +265,7 @@ With the example above, the `Post` component can read `props.id`, but not `props
 
 In the examples above we declared a separate `listItems` variable and included it in JSX:
 
-```js{3-6}
+```javascript
 function NumberList(props) {
   const numbers = props.numbers;
   const listItems = numbers.map((number) =>
@@ -282,7 +282,7 @@ function NumberList(props) {
 
 JSX allows [embedding any expressions](/docs/introducing-jsx.html#embedding-expressions-in-jsx) in curly braces so we could inline the `map()` result:
 
-```js{5-8}
+```javascript
 function NumberList(props) {
   const numbers = props.numbers;
   return (

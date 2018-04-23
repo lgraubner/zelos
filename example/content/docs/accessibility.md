@@ -28,7 +28,7 @@ The [Web Accessibility Initiative - Accessible Rich Internet Applications](https
 
 Note that all `aria-*` HTML attributes are fully supported in JSX. Whereas most DOM properties and attributes in React are camelCased, these attributes should be lowercased:
 
-```javascript{3,4}
+```javascript
 <input
   type="text" 
   aria-label={labelText}
@@ -50,7 +50,7 @@ In these cases we should rather use React Fragments to group together multiple e
 
 Use `<Fragment>` when a `key` prop is required:
  
-```javascript{1,8,11}
+```javascript
 import React, { Fragment } from 'react';
 
 function Glossary(props) {
@@ -94,7 +94,7 @@ The following resources show us how to do this:
 
 Although these standard HTML practices can be directly used in React, note that the `for` attribute is written as `htmlFor` in JSX:
 
-```javascript{1}
+```javascript
 <label htmlFor="namedInput">Name:</label>
 <input id="namedInput" type="text" name="name"/>
 ```
@@ -146,7 +146,7 @@ To set focus in React, we can use [Refs to DOM elements](/docs/refs-and-the-dom.
 
 Using this, we first create a ref to an element in the JSX of a component class:
 
-```javascript{4-5,8-9,13}
+```javascript
 class CustomTextInput extends React.Component {
   constructor(props) {
     super(props);
@@ -179,7 +179,7 @@ Then we can focus it elsewhere in our component when needed:
 Sometimes a parent component needs to set focus to an element in a child component. We can do this by [exposing DOM refs to parent components](/docs/refs-and-the-dom.html#exposing-dom-refs-to-parent-components)
 through a special prop on the child component that forwards the parent's ref to the child's DOM node.
 
-```javascript{4,12,16}
+```javascript
 function CustomTextInput(props) {
   return (
     <div>

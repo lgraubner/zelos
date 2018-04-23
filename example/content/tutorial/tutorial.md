@@ -157,7 +157,7 @@ Just to get our feet wet, let's try passing some data from the Board component t
 
 In Board's `renderSquare` method, change the code to pass a `value` prop to the Square:
 
-```js{3}
+```javascript
 class Board extends React.Component {
   renderSquare(i) {
     return <Square value={i} />;
@@ -166,7 +166,7 @@ class Board extends React.Component {
 
 Then change Square's `render` method to show that value by replacing `{/* TODO */}` with `{this.props.value}`:
 
-```js{5}
+```javascript
 class Square extends React.Component {
   render() {
     return (
@@ -192,7 +192,7 @@ After: You should see a number in each square in the rendered output.
 
 Let's make the Square component fill in an "X" when you click it. Try changing the button tag returned in the `render()` function of the Square like this:
 
-```javascript{4}
+```javascript
 class Square extends React.Component {
   render() {
     return (
@@ -212,7 +212,7 @@ React components can have state by setting `this.state` in the constructor, whic
 
 First, add a constructor to the class to initialize the state:
 
-```javascript{2-7}
+```javascript
 class Square extends React.Component {
   constructor(props) {
     super(props);
@@ -240,7 +240,7 @@ Now change the Square `render` method to display the value from the current stat
 
 Now the `<button>` tag looks like this:
 
-```javascript{10-12}
+```javascript
 class Square extends React.Component {
   constructor(props) {
     super(props);
@@ -294,7 +294,7 @@ Instead, the best solution here is to store this state in the Board component in
 
 Pulling state upwards like this is common when refactoring React components, so let's take this opportunity to try it out. Add a constructor to the Board and set its initial state to contain an array with 9 nulls, corresponding to the 9 squares:
 
-```javascript{2-7}
+```javascript
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -354,7 +354,7 @@ Board's `renderSquare` method currently looks like this:
 
 Modify it to pass a `value` prop to Square.
 
-```javascript{2}
+```javascript
   renderSquare(i) {
     return <Square value={this.state.squares[i]} />;
   }
@@ -366,7 +366,7 @@ Now we need to change what happens when a square is clicked. The Board component
 
 The usual pattern here is pass down a function from Board to Square that gets called when the square is clicked. Change `renderSquare` in Board again so that it reads:
 
-```javascript{5}
+```javascript
   renderSquare(i) {
     return (
       <Square
@@ -387,7 +387,7 @@ Now we're passing down two props from Board to Square: `value` and `onClick`. Th
 
 After these changes, the whole Square component looks like this:
 
-```javascript{1,2,4,5}
+```javascript
 class Square extends React.Component {
   render() {
     return (
@@ -411,7 +411,7 @@ Note that DOM `<button>` element's `onClick` attribute has a special meaning to 
 
 Try clicking a square – you should get an error because we haven't defined `handleClick` yet. Add it to the Board class.
 
-```javascript{9-13}
+```javascript
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -540,7 +540,7 @@ An obvious defect in our game is that only X can play. Let's fix that.
 
 Let's default the first move to be by 'X'. Modify our starting state in our Board constructor:
 
-```javascript{6}
+```javascript
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -553,7 +553,7 @@ class Board extends React.Component {
 
 Each time we move we shall toggle `xIsNext` by flipping the boolean value and saving the state. Now update Board's `handleClick` function to flip the value of `xIsNext`:
 
-```javascript{3,6}
+```javascript
   handleClick(i) {
     const squares = this.state.squares.slice();
     squares[i] = this.state.xIsNext ? 'X' : 'O';
@@ -566,7 +566,7 @@ Each time we move we shall toggle `xIsNext` by flipping the boolean value and sa
 
 Now X and O take turns. Next, change the "status" text in Board's `render` so that it also displays who is next:
 
-```javascript{2}
+```javascript
   render() {
     const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
@@ -576,7 +576,7 @@ Now X and O take turns. Next, change the "status" text in Board's `render` so th
 
 After these changes you should have this Board component:
 
-```javascript{6,11-16,29}
+```javascript
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -663,7 +663,7 @@ You can call it in Board's `render` function to check if anyone has won the game
 
 Replace the `status` declaration in Board's `render` with this code:
 
-```javascript{2-8}
+```javascript
   render() {
     const winner = calculateWinner(this.state.squares);
     let status;
@@ -679,7 +679,7 @@ Replace the `status` declaration in Board's `render` with this code:
 
 You can now change `handleClick` in Board to return early and ignore the click if someone has already won the game or if a square is already filled:
 
-```javascript{3-5}
+```javascript
   handleClick(i) {
     const squares = this.state.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
@@ -727,7 +727,7 @@ We'll want the top-level Game component to be responsible for displaying the lis
 
 First, set up the initial state for Game by adding a constructor to it:
 
-```javascript{2-10}
+```javascript
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -763,7 +763,7 @@ Then change Board so that it takes `squares` via props and has its own `onClick`
 
 Now the whole Board component looks like this:
 
-```javascript{17,18}
+```javascript
 class Board extends React.Component {
   handleClick(i) {
     const squares = this.state.squares.slice();
@@ -821,7 +821,7 @@ class Board extends React.Component {
 
 Game's `render` should look at the most recent history entry and can take over calculating the game status:
 
-```javascript{2-11,16-19,22}
+```javascript
   render() {
     const history = this.state.history;
     const current = history[history.length - 1];
@@ -853,7 +853,7 @@ Game's `render` should look at the most recent history entry and can take over c
 
 Since Game is now rendering the status, we can delete `<div className="status">{status}</div>` and the code calculating the status from the Board's `render` function:
 
-```js{1-4}
+```javascript
   render() {
     return (
       <div>
@@ -881,7 +881,7 @@ Next, we need to move the `handleClick` method implementation from Board to Game
 
 We also need to change it a little, since Game state is structured differently. Game's `handleClick` can push a new entry onto the stack by concatenating the new history entry to make a new history array.
 
-```javascript{2-4,10-12}
+```javascript
   handleClick(i) {
     const history = this.state.history;
     const current = history[history.length - 1];
@@ -907,7 +907,7 @@ At this point, Board only needs `renderSquare` and `render`; the state initializ
 
 Let's show the previous moves made in the game so far. We learned earlier that React elements are first-class JS objects and we can store them or pass them around. To render multiple items in React, we pass an array of React elements. The most common way to build that array is to map over your array of data. Let's do that in the `render` method of Game:
 
-```javascript{6-15,34}
+```javascript
   render() {
     const history = this.state.history;
     const current = history[history.length - 1];
@@ -999,7 +999,7 @@ Component keys don't need to be globally unique, only unique relative to the imm
 
 For our move list, we already have a unique ID for each step: the number of the move when it happened. In the Game's `render` method, add the key as `<li key={move}>` and the key warning should disappear:
 
-```js{6}
+```javascript
     const moves = history.map((step, move) => {
       const desc = move ?
         'Go to move #' + move :
@@ -1018,7 +1018,7 @@ Clicking any of the move buttons throws an error because `jumpTo` is undefined. 
 
 First, add `stepNumber: 0` to the initial state in Game's `constructor`:
 
-```js{8}
+```javascript
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -1036,7 +1036,7 @@ Next, we'll define the `jumpTo` method in Game to update that state. We also wan
 
 Add a method called `jumpTo` to the Game class:
 
-```javascript{5-10}
+```javascript
   handleClick(i) {
     // this method has not changed
   }
@@ -1055,7 +1055,7 @@ Add a method called `jumpTo` to the Game class:
 
 Then update `stepNumber` when a new move is made by adding `stepNumber: history.length` to the state update in Game's `handleClick`. We'll also update `handleClick` to be aware of `stepNumber` when reading the current board state so that you can go back in time then click in the board to create a new entry:
 
-```javascript{2,13}
+```javascript
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
@@ -1076,7 +1076,7 @@ Then update `stepNumber` when a new move is made by adding `stepNumber: history.
 
 Now you can modify Game's `render` to read from that step in the history:
 
-```javascript{3}
+```javascript
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];

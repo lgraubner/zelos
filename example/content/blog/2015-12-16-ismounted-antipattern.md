@@ -25,7 +25,7 @@ An optimal solution would be to find places where `setState()` might be called a
 
 For instance, if you are using a Flux store in your component, you must unsubscribe in `componentWillUnmount`:
 
-```javascript{9}
+```javascript
 class MyComponent extends React.Component {
   componentDidMount() {
     mydatastore.subscribe(this);

@@ -64,7 +64,7 @@ When React sees an element representing a user-defined component, it passes JSX 
 
 For example, this code renders "Hello, Sara" on the page:
 
-```js{1,5}
+```javascript
 function Welcome(props) {
   return <h1>Hello, {props.name}</h1>;
 }
@@ -97,7 +97,7 @@ Components can refer to other components in their output. This lets us use the s
 
 For example, we can create an `App` component that renders `Welcome` many times:
 
-```js{8-10}
+```javascript
 function Welcome(props) {
   return <h1>Hello, {props.name}</h1>;
 }
@@ -160,7 +160,7 @@ This component can be tricky to change because of all the nesting, and it is als
 
 First, we will extract `Avatar`:
 
-```js{3-6}
+```javascript
 function Avatar(props) {
   return (
     <img className="Avatar"
@@ -177,7 +177,7 @@ We recommend naming props from the component's own point of view rather than the
 
 We can now simplify `Comment` a tiny bit:
 
-```js{5}
+```javascript
 function Comment(props) {
   return (
     <div className="Comment">
@@ -200,7 +200,7 @@ function Comment(props) {
 
 Next, we will extract a `UserInfo` component that renders an `Avatar` next to the user's name:
 
-```js{3-8}
+```javascript
 function UserInfo(props) {
   return (
     <div className="UserInfo">
@@ -215,7 +215,7 @@ function UserInfo(props) {
 
 This lets us simplify `Comment` even further:
 
-```js{4}
+```javascript
 function Comment(props) {
   return (
     <div className="Comment">

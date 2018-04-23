@@ -61,7 +61,7 @@ Since JSX compiles into calls to `React.createElement`, the `React` library must
 
 For example, both of the imports are necessary in this code, even though `React` and `CustomButton` are not directly referenced from JavaScript:
 
-```js{1,2,5}
+```javascript
 import React from 'react';
 import CustomButton from './CustomButton';
 
@@ -77,7 +77,7 @@ If you don't use a JavaScript bundler and loaded React from a `<script>` tag, it
 
 You can also refer to a React component using dot-notation from within JSX. This is convenient if you have a single module that exports many React components. For example, if `MyComponents.DatePicker` is a component, you can use it directly from JSX with:
 
-```js{10}
+```javascript
 import React from 'react';
 
 const MyComponents = {
@@ -99,7 +99,7 @@ We recommend naming components with a capital letter. If you do have a component
 
 For example, this code will not run as expected:
 
-```js{3,4,10,11}
+```javascript
 import React from 'react';
 
 // Wrong! This is a component and should have been capitalized:
@@ -116,7 +116,7 @@ function HelloWorld() {
 
 To fix this, we will rename `hello` to `Hello` and use `<Hello />` when referring to it:
 
-```js{3,4,10,11}
+```javascript
 import React from 'react';
 
 // Correct! This is a component and should be capitalized:
@@ -135,7 +135,7 @@ function HelloWorld() {
 
 You cannot use a general expression as the React element type. If you do want to use a general expression to indicate the type of the element, just assign it to a capitalized variable first. This often comes up when you want to render a different component based on a prop:
 
-```js{10,11}
+```javascript
 import React from 'react';
 import { PhotoStory, VideoStory } from './stories';
 
@@ -152,7 +152,7 @@ function Story(props) {
 
 To fix this, we will assign the type to a capitalized variable first:
 
-```js{10-12}
+```javascript
 import React from 'react';
 import { PhotoStory, VideoStory } from './stories';
 
@@ -184,7 +184,7 @@ For `MyComponent`, the value of `props.foo` will be `10` because the expression 
 
 `if` statements and `for` loops are not expressions in JavaScript, so they can't be used in JSX directly. Instead, you can put these in the surrounding code. For example:
 
-```js{3-7}
+```javascript
 function NumberDescriber(props) {
   let description;
   if (props.number % 2 == 0) {
@@ -234,7 +234,7 @@ In general, we don't recommend using this because it can be confused with the [E
 
 If you already have `props` as an object, and you want to pass it in JSX, you can use `...` as a "spread" operator to pass the whole props object. These two components are equivalent:
 
-```js{7}
+```javascript
 function App1() {
   return <Greeting firstName="Ben" lastName="Hector" />;
 }
@@ -247,7 +247,7 @@ function App2() {
 
 You can also pick specific props that your component will consume while passing all other props using the spread operator.
 
-```js{2}
+```javascript
 const Button = props => {
   const { kind, ...other } = props;
   const className = kind === "primary" ? "PrimaryButton" : "SecondaryButton";
@@ -357,7 +357,7 @@ You can pass any JavaScript expression as children, by enclosing it within `{}`.
 
 This is often useful for rendering a list of JSX expressions of arbitrary length. For example, this renders an HTML list:
 
-```js{2,9}
+```javascript
 function Item(props) {
   return <li>{props.message}</li>;
 }
@@ -374,7 +374,7 @@ function TodoList() {
 
 JavaScript expressions can be mixed with other types of children. This is often useful in lieu of string templates:
 
-```js{2}
+```javascript
 function Hello(props) {
   return <div>Hello {props.addressee}!</div>;
 }
@@ -384,7 +384,7 @@ function Hello(props) {
 
 Normally, JavaScript expressions inserted in JSX will evaluate to a string, a React element, or a list of those things. However, `props.children` works just like any other prop in that it can pass any sort of data, not just the sorts that React knows how to render. For example, if you have a custom component, you could have it take a callback as `props.children`:
 
-```js{4,13}
+```javascript
 // Calls the children callback numTimes to produce a repeated component
 function Repeat(props) {
   let items = [];
@@ -425,7 +425,7 @@ Children passed to a custom component can be anything, as long as that component
 
 This can be useful to conditionally render React elements. This JSX only renders a `<Header />` if `showHeader` is `true`:
 
-```js{2}
+```javascript
 <div>
   {showHeader && <Header />}
   <Content />
@@ -434,7 +434,7 @@ This can be useful to conditionally render React elements. This JSX only renders
 
 One caveat is that some ["falsy" values](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), such as the `0` number, are still rendered by React. For example, this code will not behave as you might expect because `0` will be printed when `props.messages` is an empty array:
 
-```js{2}
+```javascript
 <div>
   {props.messages.length &&
     <MessageList messages={props.messages} />
@@ -444,7 +444,7 @@ One caveat is that some ["falsy" values](https://developer.mozilla.org/en-US/doc
 
 To fix this, make sure that the expression before `&&` is always boolean:
 
-```js{2}
+```javascript
 <div>
   {props.messages.length > 0 &&
     <MessageList messages={props.messages} />
@@ -454,7 +454,7 @@ To fix this, make sure that the expression before `&&` is always boolean:
 
 Conversely, if you want a value like `false`, `true`, `null`, or `undefined` to appear in the output, you have to [convert it to a string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#String_conversion) first:
 
-```js{2}
+```javascript
 <div>
   My JavaScript variable is {String(myVariable)}.
 </div>

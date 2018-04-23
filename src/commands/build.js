@@ -2,7 +2,6 @@
 const mri = require('mri')
 // $FlowFixMe
 const { bold } = require('chalk')
-const spinner = require('ora')
 
 const pkg = require('../../package')
 
@@ -20,9 +19,10 @@ const transformScripts = require('../lib/transformScripts')
 
 const formatExecutionTime = require('../utils/formatExecutionTime')
 const plain = require('../utils/output/plain')
-const info = require('../utils/output/info')
+const newLine = require('../utils/output/newLine')
 const exit = require('../utils/exit')
 const error = require('../utils/output/error')
+const spinner = require('../utils/output/spinner')
 
 const help = () => {
   plain(`
@@ -154,6 +154,7 @@ const main = async (argv_: string[]): Promise<any> => {
     try {
       output.start('create RSS feed')
       await createRSSFeed(pages, ctx)
+      output.succeed()
     } catch (err) {
       output.fail()
       error('An unexpected error occured while creating rss feed', err.message)
@@ -191,7 +192,9 @@ const main = async (argv_: string[]): Promise<any> => {
 
   const endTime = process.hrtime(startTime)
   const executionTime = formatExecutionTime(startTime, endTime)
-  info(`Done building in ${executionTime}.`, true)
+
+  newLine()
+  output.info(`Done building in ${executionTime}.`)
 }
 
 module.exports = main

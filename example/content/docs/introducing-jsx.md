@@ -34,7 +34,7 @@ You can embed any [JavaScript expression](https://developer.mozilla.org/en-US/do
 
 For example, `2 + 2`, `user.firstName`, and `formatName(user)` are all valid expressions:
 
-```js{12}
+```javascript
 function formatName(user) {
   return user.firstName + ' ' + user.lastName;
 }
@@ -66,7 +66,7 @@ After compilation, JSX expressions become regular JavaScript function calls and 
 
 This means that you can use JSX inside of `if` statements and `for` loops, assign it to variables, accept it as arguments, and return it from functions:
 
-```js{3,5}
+```javascript
 function getGreeting(user) {
   if (user) {
     return <h1>Hello, {formatName(user)}!</h1>;

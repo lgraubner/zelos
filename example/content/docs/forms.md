@@ -31,7 +31,7 @@ We can combine the two by making the React state be the "single source of truth"
 
 For example, if we want to make the previous example log the name when it is submitted, we can write the form as a controlled component:
 
-```javascript{4,10-12,24}
+```javascript
 class NameForm extends React.Component {
   constructor(props) {
     super(props);
@@ -70,7 +70,7 @@ Since the `value` attribute is set on our form element, the displayed value will
 
 With a controlled component, every state mutation will have an associated handler function. This makes it straightforward to modify or validate user input. For example, if we wanted to enforce that names are written with all uppercase letters, we could write `handleChange` as:
 
-```javascript{2}
+```javascript
 handleChange(event) {
   this.setState({value: event.target.value.toUpperCase()});
 }
@@ -88,7 +88,7 @@ In HTML, a `<textarea>` element defines its text by its children:
 
 In React, a `<textarea>` uses a `value` attribute instead. This way, a form using a `<textarea>` can be written very similarly to a form that uses a single-line input:
 
-```javascript{4-6,12-14,26}
+```javascript
 class EssayForm extends React.Component {
   constructor(props) {
     super(props);
@@ -140,7 +140,7 @@ In HTML, `<select>` creates a drop-down list. For example, this HTML creates a d
 
 Note that the Coconut option is initially selected, because of the `selected` attribute. React, instead of using this `selected` attribute, uses a `value` attribute on the root `select` tag. This is more convenient in a controlled component because you only need to update it in one place. For example:
 
-```javascript{4,10-12,24}
+```javascript
 class FlavorForm extends React.Component {
   constructor(props) {
     super(props);
@@ -206,7 +206,7 @@ When you need to handle multiple controlled `input` elements, you can add a `nam
 
 For example:
 
-```javascript{15,18,28,37}
+```javascript
 class Reservation extends React.Component {
   constructor(props) {
     super(props);
@@ -258,7 +258,7 @@ class Reservation extends React.Component {
 
 Note how we used the ES6 [computed property name](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names) syntax to update the state key corresponding to the given input name:
 
-```js{2}
+```javascript
 this.setState({
   [name]: value
 });
@@ -266,7 +266,7 @@ this.setState({
 
 It is equivalent to this ES5 code:
 
-```js{2}
+```javascript
 var partialState = {};
 partialState[name] = value;
 this.setState(partialState);

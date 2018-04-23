@@ -56,7 +56,7 @@ var NoLink = createReactClass({
 
 This works really well and it's very clear how data is flowing, however, with a lot of form fields it could get a bit verbose. Let's use `LinkedStateMixin` to save us some typing:
 
-```javascript{4,9}
+```javascript
 var createReactClass = require('create-react-class');
 
 var WithLink = createReactClass({
@@ -85,7 +85,7 @@ There are two sides to `LinkedStateMixin`: the place where you create the `value
 
 ### valueLink Without LinkedStateMixin
 
-```javascript{7-9,11-14}
+```javascript
 var createReactClass = require('create-react-class');
 
 var WithoutMixin = createReactClass({

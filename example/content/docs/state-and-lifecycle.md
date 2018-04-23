@@ -13,7 +13,7 @@ So far we have only learned one way to update the UI.
 
 We call `ReactDOM.render()` to change the rendered output:
 
-```js{8-11}
+```javascript
 function tick() {
   const element = (
     <div>
@@ -36,7 +36,7 @@ In this section, we will learn how to make the `Clock` component truly reusable 
 
 We can start by encapsulating how the clock looks:
 
-```js{3-6,12}
+```javascript
 function Clock(props) {
   return (
     <div>
@@ -62,7 +62,7 @@ However, it misses a crucial requirement: the fact that the `Clock` sets up a ti
 
 Ideally we want to write this once and have the `Clock` update itself:
 
-```js{2}
+```javascript
 ReactDOM.render(
   <Clock />,
   document.getElementById('root')
@@ -114,7 +114,7 @@ We will move the `date` from props to state in three steps:
 
 1) Replace `this.props.date` with `this.state.date` in the `render()` method:
 
-```js{6}
+```javascript
 class Clock extends React.Component {
   render() {
     return (
@@ -129,7 +129,7 @@ class Clock extends React.Component {
 
 2) Add a [class constructor](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes#Constructor) that assigns the initial `this.state`:
 
-```js{4}
+```javascript
 class Clock extends React.Component {
   constructor(props) {
     super(props);
@@ -149,7 +149,7 @@ class Clock extends React.Component {
 
 Note how we pass `props` to the base constructor:
 
-```js{2}
+```javascript
   constructor(props) {
     super(props);
     this.state = {date: new Date()};
@@ -160,7 +160,7 @@ Class components should always call the base constructor with `props`.
 
 3) Remove the `date` prop from the `<Clock />` element:
 
-```js{2}
+```javascript
 ReactDOM.render(
   <Clock />,
   document.getElementById('root')
@@ -171,7 +171,7 @@ We will later add the timer code back to the component itself.
 
 The result looks like this:
 
-```js{2-5,11,18}
+```javascript
 class Clock extends React.Component {
   constructor(props) {
     super(props);
@@ -208,7 +208,7 @@ We also want to [clear that timer](https://developer.mozilla.org/en-US/docs/Web/
 
 We can declare special methods on the component class to run some code when a component mounts and unmounts:
 
-```js{7-9,11-13}
+```javascript
 class Clock extends React.Component {
   constructor(props) {
     super(props);
@@ -238,7 +238,7 @@ These methods are called "lifecycle hooks".
 
 The `componentDidMount()` hook runs after the component output has been rendered to the DOM. This is a good place to set up a timer:
 
-```js{2-5}
+```javascript
   componentDidMount() {
     this.timerID = setInterval(
       () => this.tick(),
@@ -253,7 +253,7 @@ While `this.props` is set up by React itself and `this.state` has a special mean
 
 We will tear down the timer in the `componentWillUnmount()` lifecycle hook:
 
-```js{2}
+```javascript
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
@@ -263,7 +263,7 @@ Finally, we will implement a method called `tick()` that the `Clock` component w
 
 It will use `this.setState()` to schedule updates to the component local state:
 
-```js{18-22}
+```javascript
 class Clock extends React.Component {
   constructor(props) {
     super(props);
@@ -382,7 +382,7 @@ When you call `setState()`, React merges the object you provide into the current
 
 For example, your state may contain several independent variables:
 
-```js{4,5}
+```javascript
   constructor(props) {
     super(props);
     this.state = {
@@ -394,7 +394,7 @@ For example, your state may contain several independent variables:
 
 Then you can update them independently with separate `setState()` calls:
 
-```js{4,10}
+```javascript
   componentDidMount() {
     fetchPosts().then(response => {
       this.setState({
@@ -446,7 +446,7 @@ If you imagine a component tree as a waterfall of props, each component's state 
 
 To show that all components are truly isolated, we can create an `App` component that renders three `<Clock>`s:
 
-```js{4-6}
+```javascript
 function App() {
   return (
     <div>

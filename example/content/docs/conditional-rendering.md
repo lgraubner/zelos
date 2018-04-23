@@ -25,7 +25,7 @@ function GuestGreeting(props) {
 
 We'll create a `Greeting` component that displays either of these components depending on whether a user is logged in:
 
-```javascript{3-7,11,12}
+```javascript
 function Greeting(props) {
   const isLoggedIn = props.isLoggedIn;
   if (isLoggedIn) {
@@ -73,7 +73,7 @@ In the example below, we will create a [stateful component](/docs/state-and-life
 
 It will render either `<LoginButton />` or `<LogoutButton />` depending on its current state. It will also render a `<Greeting />` from the previous example:
 
-```javascript{20-25,29,30}
+```javascript
 class LoginControl extends React.Component {
   constructor(props) {
     super(props);
@@ -122,7 +122,7 @@ While declaring a variable and using an `if` statement is a fine way to conditio
 
 You may [embed any expressions in JSX](/docs/introducing-jsx.html#embedding-expressions-in-jsx) by wrapping them in curly braces. This includes the JavaScript logical `&&` operator. It can be handy for conditionally including an element:
 
-```js{6-10}
+```javascript
 function Mailbox(props) {
   const unreadMessages = props.unreadMessages;
   return (
@@ -156,7 +156,7 @@ Another method for conditionally rendering elements inline is to use the JavaScr
 
 In the example below, we use it to conditionally render a small block of text.
 
-```javascript{5}
+```javascript
 render() {
   const isLoggedIn = this.state.isLoggedIn;
   return (
@@ -169,7 +169,7 @@ render() {
 
 It can also be used for larger expressions although it is less obvious what's going on:
 
-```js{5,7,9}
+```javascript
 render() {
   const isLoggedIn = this.state.isLoggedIn;
   return (
@@ -192,7 +192,7 @@ In rare cases you might want a component to hide itself even though it was rende
 
 In the example below, the `<WarningBanner />` is rendered depending on the value of the prop called `warn`. If the value of the prop is `false`, then the component does not render:
 
-```javascript{2-4,29}
+```javascript
 function WarningBanner(props) {
   if (!props.warn) {
     return null;

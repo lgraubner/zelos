@@ -27,7 +27,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'; // ES6
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group'); // ES5 with npm
 ```
 
-```javascript{31-36}
+```javascript
 class TodoList extends React.Component {
   constructor(props) {
     super(props);
@@ -104,7 +104,7 @@ You'll notice that animation durations need to be specified in both the CSS and 
 
 `ReactCSSTransitionGroup` provides the optional prop `transitionAppear`, to add an extra transition phase at the initial mount of the component. There is generally no transition phase at the initial mount as the default value of `transitionAppear` is `false`. The following is an example which passes the prop `transitionAppear` with the value `true`.
 
-```javascript{5-6}
+```javascript
 render() {
   return (
     <ReactCSSTransitionGroup
@@ -175,7 +175,7 @@ In order for it to apply transitions to its children, the `ReactCSSTransitionGro
 
 The example below would **not** work, because the `ReactCSSTransitionGroup` is being mounted along with the new item, instead of the new item being mounted within it. Compare this to the [Getting Started](#getting-started) section above to see the difference.
 
-```javascript{4,6,13}
+```javascript
 render() {
   const items = this.state.items.map((item, i) => (
     <div key={item} onClick={() => this.handleRemove(i)}>
@@ -198,7 +198,7 @@ render() {
 
 In the example above, we rendered a list of items into `ReactCSSTransitionGroup`. However, the children of `ReactCSSTransitionGroup` can also be one or zero items. This makes it possible to animate a single element entering or leaving. Similarly, you can animate a new element replacing the current element. For example, we can implement a simple image carousel like this:
 
-```javascript{10}
+```javascript
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 function ImageCarousel(props) {
@@ -247,7 +247,7 @@ var ReactTransitionGroup = require('react-addons-transition-group') // ES5 with 
 
 `ReactTransitionGroup` renders as a `span` by default. You can change this behavior by providing a `component` prop. For example, here's how you would render a `<ul>`:
 
-```javascript{1}
+```javascript
 <ReactTransitionGroup component="ul">
   {/* ... */}
 </ReactTransitionGroup>
@@ -255,7 +255,7 @@ var ReactTransitionGroup = require('react-addons-transition-group') // ES5 with 
 
 Any additional, user-defined, properties will become properties of the rendered component. For example, here's how you would render a `<ul>` with CSS class:
 
-```javascript{1}
+```javascript
 <ReactTransitionGroup component="ul" className="animated-list">
   {/* ... */}
 </ReactTransitionGroup>

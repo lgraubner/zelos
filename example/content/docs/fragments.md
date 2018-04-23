@@ -70,7 +70,7 @@ So, we introduce `Fragment`s.
 
 ## Usage
 
-```jsx{4,7}
+```javascript
 class Columns extends React.Component {
   render() {
     return (
@@ -98,7 +98,7 @@ which results in a correct `<Table />` output of:
 
 There is a new, shorter syntax you can use for declaring fragments. It looks like empty tags:
 
-```jsx{4,7}
+```javascript
 class Columns extends React.Component {
   render() {
     return (
