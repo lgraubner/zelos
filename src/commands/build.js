@@ -77,8 +77,9 @@ const main = async (argv_: string[]): Promise<any> => {
   }
 
   try {
+    output.start('remove previous builds')
     await cleanPublicDir(ctx)
-    output.succeed('remove previous builds')
+    output.succeed()
   } catch (err) {
     output.fail()
     error(
@@ -89,8 +90,9 @@ const main = async (argv_: string[]): Promise<any> => {
   }
 
   try {
+    output.start('copy static files')
     await copyStaticFiles(ctx)
-    output.succeed('copy static files')
+    output.succeed()
   } catch (err) {
     output.fail()
     error(
