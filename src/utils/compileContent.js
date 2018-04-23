@@ -2,8 +2,8 @@
 const path = require('path')
 const minifyHtml = require('html-minifier').minify
 const handlebars = require('handlebars')
-// const highlight = require('remark-highlight.js')
 const marked = require('marked')
+const highlight = require('highlight.js')
 
 const TemplateCache = require('../lib/TemplateCache')
 
@@ -16,7 +16,16 @@ const compileContent = async (
 
   let html = ''
   if (page.contentType === 'md') {
-    html = marked(page.content)
+    html = marked(page.content, {
+      gfm: true,
+      highlight: function(code, lang) {
+        try {
+          return highlight.highlight(lang, code).value
+        } catch (err) {
+          return code
+        }
+      }
+    })
   } else if (page.contentType === 'html') {
     const contentTemplate = handlebars.compile(page.content)
     html = contentTemplate(data)
