@@ -1,8 +1,6 @@
-// @flow
-// $FlowFixMe
 const { red } = require('chalk')
 
-const error = (...msgs: any): any =>
+const error = (...msgs) =>
   console.error(`\n${red('> Error!')} ${msgs.join('\n')}`)
 
 module.exports = error

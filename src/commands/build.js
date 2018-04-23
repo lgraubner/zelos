@@ -56,43 +56,80 @@ const main = async (argv_: string[]): Promise<any> => {
 
   let output = spinner()
 
-  const ctx = await createContext(argv)
+  let ctx = {}
+  try {
+    ctx = await createContext(argv)
+  } catch (err) {
+    error('An unexpected error occured while reading the config.', err.message)
+    return 1
+  }
+
   const { config } = ctx
 
-  output.start('Collecting page data')
-  const pages = await scanPages(ctx)
-  output.succeed()
+  let pages = []
+  try {
+    output.start('scanning pages')
+    pages = await scanPages(ctx)
+    output.succeed()
+  } catch (err) {
+    error('An unexpected error occured while scanning pages.', err.message)
+    return 1
+  }
 
-  await cleanPublicDir(ctx)
-  output.succeed('Cleaning public dir')
+  try {
+    await cleanPublicDir(ctx)
+    output.succeed('remove previous builds')
+  } catch (err) {
+    output.fail()
+    error(
+      'An unexprected error occured while cleaning public dir.',
+      err.message
+    )
+    return 1
+  }
 
-  await copyStaticFiles(ctx)
-  output.succeed('Copying static file')
+  try {
+    await copyStaticFiles(ctx)
+    output.succeed('copy static files')
+  } catch (err) {
+    output.fail()
+    error(
+      'An unexpected error occured while copying static files.',
+      err.message
+    )
+    return 1
+  }
 
   let styleManifest
   try {
-    output.start('Building CSS')
+    output.start('build CSS')
     styleManifest = await processStyles(ctx)
     output.succeed()
   } catch (err) {
     output.fail()
+    error('An unexpected error occured while building css.', err.message)
+    return 1
   }
 
   let scriptManifest
   try {
-    output.start('Building JavaScript bundles')
+    output.start('build production JavaScript bundles')
     scriptManifest = await transformScripts(ctx)
     output.succeed()
   } catch (err) {
     output.fail()
     if (err instanceof Error) {
       error('An error occured while transforming js.', err.message)
-      exit(1)
+
+      return 1
     }
+
+    error('An unexpected error occured while transforming js.', err.message)
+    return 1
   }
 
   try {
-    output.start('Creating static pages')
+    output.start('build static HTML for pages')
     await createPages(
       pages,
       {
@@ -104,35 +141,57 @@ const main = async (argv_: string[]): Promise<any> => {
     output.succeed()
   } catch (err) {
     output.fail()
+    error(
+      'An unexpected error occured while creating static pages.',
+      err.message
+    )
+    return 1
   }
 
   // await optimizeImages(ctx).then(() => output.succeed())
 
   if (config.rss) {
     try {
-      output.start('Creating RSS feed')
+      output.start('create RSS feed')
       await createRSSFeed(pages, ctx)
     } catch (err) {
       output.fail()
-      error(err)
+      error('An unexpected error occured while creating rss feed', err.message)
+      return 1
     }
   }
 
   if (config.sitemap) {
-    output.start('Creating sitemap')
-    await createSitemap(pages, ctx)
-    output.succeed()
+    try {
+      output.start('create sitemap')
+      await createSitemap(pages, ctx)
+      output.succeed()
+    } catch (err) {
+      output.fail()
+      error('An unexpected error occured while creating sitemap', err.message)
+      return 1
+    }
   }
 
   if (config.serviceWorker) {
-    output.start('Creating service worker')
-    await createServiceWorker(ctx)
-    output.succeed()
+    try {
+      output.start('create service worker')
+      const stats = await createServiceWorker(ctx)
+      output.succeed()
+      output.info(stats)
+    } catch (err) {
+      output.fail()
+      error(
+        'An unexpected error occured while creating service worker',
+        err.message
+      )
+      return 1
+    }
   }
 
   const endTime = process.hrtime(startTime)
   const executionTime = formatExecutionTime(startTime, endTime)
-  info(`Done building in ${executionTime}.`)
+  info(`Done building in ${executionTime}.`, true)
 }
 
 module.exports = main

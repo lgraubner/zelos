@@ -65,13 +65,13 @@ const main = async (argv_: string[]) => {
 
   if (!availableCommands.has(command)) {
     error(`Command "${command}" not found.`)
-    exit(1)
+    return 1
   }
 
-  // execute command, remove command from args
-  commands[command](argv_[0] === 'command' ? argv_.slice(1) : argv_)
-
   updateNotifier({ pkg }).notify()
+
+  // execute command, remove command from args
+  return commands[command](argv_[0] === 'command' ? argv_.slice(1) : argv_)
 }
 
 debug('start')
@@ -103,7 +103,11 @@ const handleUnexpected = (err: Object) => {
 process.on('unhandledRejection', handleRejection)
 process.on('uncaughtException', handleUnexpected)
 
-main(process.argv.slice(2)).catch(handleUnexpected)
+main(process.argv.slice(2))
+  .then(exitCode => {
+    process.exitCode = exitCode
+  })
+  .catch(handleUnexpected)
 
 // blocked(
 //   (time, stack) => {
