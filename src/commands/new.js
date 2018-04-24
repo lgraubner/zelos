@@ -5,10 +5,11 @@ const { resolve } = require('path')
 const pkg = require('../../package')
 // $FlowFixMe
 const { bold } = require('chalk')
+const path = require('path')
 
 const error = require('../utils/output/error')
-const info = require('../utils/output/info')
 const plain = require('../utils/output/plain')
+const spinner = require('../utils/output/spinner')
 
 const help = () => {
   plain(`
@@ -19,11 +20,6 @@ const help = () => {
     -h, --help            Display help
 `)
 }
-
-const configContent = `module.exports = {
-  siteName: 'My blog'
-}
-`
 
 const main = async (argv_: string[]) => {
   const argv = mri(argv_, {
@@ -56,24 +52,37 @@ const main = async (argv_: string[]) => {
     }
   }
 
-  const layoutDir = resolve(projectPath, 'layouts')
-  const contentDir = resolve(projectPath, 'pages')
-  const staticDir = resolve(projectPath, 'static')
+  const output = spinner()
 
-  const configPath = resolve(projectPath, 'config.js')
+  const exampleConfig = {
+    siteUrl: 'foo'
+  }
 
-  // make sure project dir exists
-  await fs.ensureDir(projectPath)
+  const baseLayoutPath = path.join(projectPath, 'layouts/_base.html')
+  const defaultLayoutPath = path.join(projectPath, 'layouts/default.html')
+  const staticPath = path.join(projectPath, 'static')
+  const contentPath = path.join(projectPath, 'content')
+  const cssPath = path.join(projectPath, 'assets/css')
+  const jsPath = path.join(projectPath, 'assets/js')
+  const configPath = path.join(projectPath, 'config.json')
 
-  // create directories
-  await Promise.all([
-    fs.ensureDir(layoutDir),
-    fs.ensureDir(contentDir),
-    fs.ensureDir(staticDir),
-    fs.writeFile(configPath, configContent)
-  ])
-
-  info('Done. Start hacking!')
+  try {
+    await Promise.all([
+      fs.outputFile(baseLayoutPath, ''),
+      fs.outputFile(defaultLayoutPath, ''),
+      fs.ensureDir(staticPath),
+      fs.ensureDir(contentPath),
+      fs.ensureDir(cssPath),
+      fs.ensureDir(jsPath),
+      fs.outputJson(configPath, exampleConfig, {
+        spaces: 2
+      })
+    ])
+    plain(`Success! Your new Zelos site is created in ${projectPath}`)
+  } catch (err) {
+    output.fail()
+    plain('\nAn unexpected error occured during bootstrapping', err.message)
+  }
 }
 
 module.exports = main

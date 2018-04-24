@@ -15,6 +15,10 @@ const transformScripts = async (ctx: Object) => {
     return obj
   }, {})
 
+  if (Object.keys(entries).length === 0) {
+    return
+  }
+
   const plugins = []
   if (config.minify) {
     plugins.push(new UglifyJsPlugin())

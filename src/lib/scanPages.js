@@ -33,9 +33,7 @@ const scanPages = async (ctx: Object): Promise<any> => {
         file,
         ...frontmatter,
         link: urlPath,
-        permalink: config.siteUrl
-          ? resolve(config.siteUrl, urlPath)
-          : undefined,
+        permalink: config.siteUrl ? resolve(config.siteUrl, urlPath) : urlPath,
         content,
         contentType
       }

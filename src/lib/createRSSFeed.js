@@ -18,7 +18,10 @@ const createRSSFeed = async (pages: Object[], ctx: Object): Promise<any> => {
   })
 
   pages.map(page => {
-    if (config.rssRegex.test(page.srcFile) && !page.excludeFromRSS) {
+    if (
+      new RegExp(config.rssRegex).test(page.srcFile) &&
+      !page.excludeFromRSS
+    ) {
       feed.item({
         url: page.permalink,
         title: page.title,

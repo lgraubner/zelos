@@ -70,7 +70,7 @@ const main = async (argv_: string[]) => {
   updateNotifier({ pkg }).notify()
 
   // execute command, remove command from args
-  return commands[command](argv_[0] === 'command' ? argv_.slice(1) : argv_)
+  return commands[command](argv_[0] === command ? argv_.slice(1) : argv_)
 }
 
 debug('start')

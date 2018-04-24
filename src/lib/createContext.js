@@ -19,7 +19,7 @@ const defaultConfig = {
   publicDir: 'public',
   rss: true,
   rssFilename: 'feed.xml',
-  rssRegex: /\.md$/,
+  rssRegex: '/blog/.+$',
   serviceWorker: true,
   sitemap: true,
   siteUrl: '',
