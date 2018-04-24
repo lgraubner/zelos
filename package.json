@@ -22,7 +22,7 @@
     "build": "webpack --mode production"
   },
   "homepage": "https://larsgraubner.com",
-  "keywords": [],
+  "keywords": ["static", "static-site", "static-site-generator", "generator", "html", "nodejs", "zeroconfig"],
   "author": "Lars Graubner <mail@larsgraubner.de> (https://larsgraubner.com)",
   "license": "MIT",
   "dependencies": {
