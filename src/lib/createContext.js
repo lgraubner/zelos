@@ -13,6 +13,7 @@ const defaultConfig = {
   defaultLayout: 'default',
   defaultPageType: 'page',
   drafts: false,
+  language: 'en',
   layoutDir: 'layouts',
   minify: true,
   publicDir: 'public',
@@ -21,8 +22,8 @@ const defaultConfig = {
   rssRegex: /\.md$/,
   serviceWorker: true,
   sitemap: true,
-  staticDir: 'static',
-  language: 'en'
+  siteUrl: '',
+  staticDir: 'static'
 }
 
 const createContext = async (argv: Object): Object => {

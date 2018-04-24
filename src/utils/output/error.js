@@ -1,6 +1,5 @@
 const { red } = require('chalk')
 
-const error = (...msgs) =>
-  console.error(`\n${red('> Error!')} ${msgs.join('\n')}`)
+const error = (...msgs) => console.error(`\n${red('error')} ${msgs.join('\n')}`)
 
 module.exports = error

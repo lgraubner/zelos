@@ -20,8 +20,9 @@ const transformScripts = require('../lib/transformScripts')
 const formatExecutionTime = require('../utils/formatExecutionTime')
 const plain = require('../utils/output/plain')
 const newLine = require('../utils/output/newLine')
-const error = require('../utils/output/error')
 const spinner = require('../utils/output/spinner')
+const warn = require('../utils/output/warn')
+const info = require('../utils/output/info')
 
 const help = () => {
   plain(`
@@ -59,7 +60,10 @@ const main = async (argv_: string[]): Promise<any> => {
   try {
     ctx = await createContext(argv)
   } catch (err) {
-    error('An unexpected error occured while reading the config.', err.message)
+    plain(
+      '\nAn unexpected error occured while reading the config.',
+      err.message
+    )
     return 1
   }
 
@@ -71,7 +75,7 @@ const main = async (argv_: string[]): Promise<any> => {
     pages = await scanPages(ctx)
     output.succeed()
   } catch (err) {
-    error('An unexpected error occured while scanning pages.', err.message)
+    plain('\nAn unexpected error occured while scanning pages.', err.message)
     return 1
   }
 
@@ -81,8 +85,8 @@ const main = async (argv_: string[]): Promise<any> => {
     output.succeed()
   } catch (err) {
     output.fail()
-    error(
-      'An unexprected error occured while cleaning public dir.',
+    plain(
+      '\nAn unexprected error occured while cleaning public dir.',
       err.message
     )
     return 1
@@ -94,8 +98,8 @@ const main = async (argv_: string[]): Promise<any> => {
     output.succeed()
   } catch (err) {
     output.fail()
-    error(
-      'An unexpected error occured while copying static files.',
+    plain(
+      '\nAn unexpected error occured while copying static files.',
       err.message
     )
     return 1
@@ -108,7 +112,7 @@ const main = async (argv_: string[]): Promise<any> => {
     output.succeed()
   } catch (err) {
     output.fail()
-    error('An unexpected error occured while building css.', err.message)
+    plain('\nAn unexpected error occured while building css.', err.message)
     return 1
   }
 
@@ -120,12 +124,12 @@ const main = async (argv_: string[]): Promise<any> => {
   } catch (err) {
     output.fail()
     if (err instanceof Error) {
-      error('An error occured while transforming js.', err.message)
+      plain(err.message)
 
       return 1
     }
 
-    error('An unexpected error occured while transforming js.', err.message)
+    plain('\nAn unexpected error occured while transforming js.', err.message)
     return 1
   }
 
@@ -142,36 +146,48 @@ const main = async (argv_: string[]): Promise<any> => {
     output.succeed()
   } catch (err) {
     output.fail()
-    error(
-      'An unexpected error occured while creating static pages.',
+    plain(
+      '\nAn unexpected error occured while creating static pages.',
       err.message
     )
     return 1
   }
 
-  // await optimizeImages(ctx).then(() => output.succeed())
-
   if (config.rss) {
-    try {
-      output.start('create RSS feed')
-      await createRSSFeed(pages, ctx)
-      output.succeed()
-    } catch (err) {
-      output.fail()
-      error('An unexpected error occured while creating rss feed', err.message)
-      return 1
+    if (config.siteUrl) {
+      try {
+        output.start('create RSS feed')
+        await createRSSFeed(pages, ctx)
+        output.succeed()
+      } catch (err) {
+        output.fail()
+        plain(
+          '\nAn unexpected error occured while creating rss feed',
+          err.message
+        )
+        return 1
+      }
+    } else {
+      warn('RSS feed not created as "siteUrl" is not set.')
     }
   }
 
   if (config.sitemap) {
-    try {
-      output.start('create sitemap')
-      await createSitemap(pages, ctx)
-      output.succeed()
-    } catch (err) {
-      output.fail()
-      error('An unexpected error occured while creating sitemap', err.message)
-      return 1
+    if (config.siteUrl) {
+      try {
+        output.start('create sitemap')
+        await createSitemap(pages, ctx)
+        output.succeed()
+      } catch (err) {
+        output.fail()
+        plain(
+          '\nAn unexpected error occured while creating sitemap',
+          err.message
+        )
+        return 1
+      }
+    } else {
+      warn('sitemap not created as "siteUrl" is not set.')
     }
   }
 
@@ -180,11 +196,11 @@ const main = async (argv_: string[]): Promise<any> => {
       output.start('create service worker')
       const stats = await createServiceWorker(ctx)
       output.succeed()
-      output.info(stats)
+      info(stats)
     } catch (err) {
       output.fail()
-      error(
-        'An unexpected error occured while creating service worker',
+      plain(
+        '\nAn unexpected error occured while creating service worker',
         err.message
       )
       return 1
@@ -195,7 +211,7 @@ const main = async (argv_: string[]): Promise<any> => {
   const executionTime = formatExecutionTime(startTime, endTime)
 
   newLine()
-  output.info(`Done building in ${executionTime}.`)
+  info(`Done building in ${executionTime}.`)
 }
 
 module.exports = main

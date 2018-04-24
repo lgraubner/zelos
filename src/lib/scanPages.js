@@ -2,6 +2,7 @@
 const glob = require('globby')
 const debug = require('debug')('zelos:scanPages')
 const path = require('path')
+const { resolve } = require('url')
 
 const getUrlPath = require('../utils/getUrlPath')
 const parseFile = require('../utils/parseFile')
@@ -32,6 +33,9 @@ const scanPages = async (ctx: Object): Promise<any> => {
         file,
         ...frontmatter,
         link: urlPath,
+        permalink: config.siteUrl
+          ? resolve(config.siteUrl, urlPath)
+          : undefined,
         content,
         contentType
       }

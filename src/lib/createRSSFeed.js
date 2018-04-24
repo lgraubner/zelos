@@ -7,10 +7,6 @@ const { resolve } = require('url')
 const createRSSFeed = async (pages: Object[], ctx: Object): Promise<any> => {
   const { paths, config } = ctx
 
-  if (!config.rss) {
-    return
-  }
-
   const feed = new RSS({
     title: config.siteName,
     description: config.description,
@@ -24,7 +20,7 @@ const createRSSFeed = async (pages: Object[], ctx: Object): Promise<any> => {
   pages.map(page => {
     if (config.rssRegex.test(page.srcFile) && !page.excludeFromRSS) {
       feed.item({
-        url: page.url,
+        url: page.permalink,
         title: page.title,
         description: page.description,
         date: page.date
