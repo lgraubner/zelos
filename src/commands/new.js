@@ -8,7 +8,6 @@ const { bold } = require('chalk')
 
 const error = require('../utils/output/error')
 const info = require('../utils/output/info')
-const exit = require('../utils/exit')
 const plain = require('../utils/output/plain')
 
 const help = () => {
@@ -53,7 +52,7 @@ const main = async (argv_: string[]) => {
       error(
         `Destination path ${projectPath} already exists and is not an empty directory.`
       )
-      exit(1)
+      return 1
     }
   }
 

@@ -2,7 +2,6 @@
 const { resolve } = require('path')
 
 const error = require('../utils/output/error')
-const exit = require('../utils/exit')
 
 const readConfigFile = require('../utils/readConfigFile')
 const readPackageConfig = require('../utils/readPackageConfig')
@@ -57,7 +56,7 @@ const createContext = async (argv: Object): Object => {
       )
     }
 
-    exit(1)
+    process.exit(1)
   }
 
   return {

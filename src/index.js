@@ -10,7 +10,6 @@ const pkg = require('../package')
 
 const commands = require('./commands')
 
-const exit = require('./utils/exit')
 const error = require('./utils/output/error')
 const plain = require('./utils/output/plain')
 
@@ -89,7 +88,7 @@ const handleRejection = err => {
     error('An unexpected empty rejection occurred')
   }
 
-  exit(1)
+  process.exit(1)
 }
 
 const handleUnexpected = (err: Object) => {
@@ -97,7 +96,7 @@ const handleUnexpected = (err: Object) => {
 
   error('An unexpected error occured!', err.message)
 
-  exit(1)
+  process.exit(1)
 }
 
 process.on('unhandledRejection', handleRejection)

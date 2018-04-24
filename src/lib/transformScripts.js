@@ -33,7 +33,21 @@ const transformScripts = async (ctx: Object) => {
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          loaders: ['babel-loader']
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  '@babel/env',
+                  {
+                    targets: {
+                      browsers: ['>0.25%', 'not ie 11', 'not op_mini all']
+                    }
+                  }
+                ]
+              ]
+            }
+          }
         },
         {
           test: /\.js$/,

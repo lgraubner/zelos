@@ -20,7 +20,6 @@ const transformScripts = require('../lib/transformScripts')
 const formatExecutionTime = require('../utils/formatExecutionTime')
 const plain = require('../utils/output/plain')
 const newLine = require('../utils/output/newLine')
-const exit = require('../utils/exit')
 const error = require('../utils/output/error')
 const spinner = require('../utils/output/spinner')
 
@@ -51,7 +50,7 @@ const main = async (argv_: string[]): Promise<any> => {
 
   if (argv.help) {
     help()
-    exit(0)
+    return 0
   }
 
   let output = spinner()
