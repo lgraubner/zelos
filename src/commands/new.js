@@ -23,9 +23,14 @@ const help = () => {
 
 const main = async (argv_: string[]) => {
   const argv = mri(argv_, {
+    string: ['url'],
     boolean: ['help'],
     alias: {
-      help: 'h'
+      help: 'h',
+      url: 'U'
+    },
+    default: {
+      url: 'https://example.com'
     }
   })
 
@@ -55,15 +60,13 @@ const main = async (argv_: string[]) => {
   const output = spinner()
 
   const exampleConfig = {
-    siteUrl: 'foo'
+    siteUrl: argv.url
   }
 
   const baseLayoutPath = path.join(projectPath, 'layouts/_base.html')
   const defaultLayoutPath = path.join(projectPath, 'layouts/default.html')
   const staticPath = path.join(projectPath, 'static')
   const contentPath = path.join(projectPath, 'content')
-  const cssPath = path.join(projectPath, 'assets/css')
-  const jsPath = path.join(projectPath, 'assets/js')
   const configPath = path.join(projectPath, 'config.json')
 
   try {
@@ -72,8 +75,6 @@ const main = async (argv_: string[]) => {
       fs.outputFile(defaultLayoutPath, ''),
       fs.ensureDir(staticPath),
       fs.ensureDir(contentPath),
-      fs.ensureDir(cssPath),
-      fs.ensureDir(jsPath),
       fs.outputJson(configPath, exampleConfig, {
         spaces: 2
       })

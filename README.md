@@ -1,6 +1,6 @@
 # Zelos
 
-> ⚡ A batteries included static site generator for Node.js
+> ☄️ A batteries included static site generator for Node.js
 
 ## Table of contents
 
@@ -29,7 +29,7 @@ npm install -D zelos
 Pages with `draft: true` will be not built by default. To build drafts add this option.
 
 ```bash
-zelos buid --drafts
+zelos build --drafts
 ```
 
 ### serve
@@ -57,7 +57,7 @@ zelos serve
   "publicDir": "public",
   "rss": true,
   "rssFilename": "feed.xml",
-  "rssRegex": /\.md$/,
+  "rssRegex": "\.md$",
   "serviceWorker": true,
   "sitemap": true,
   "staticDir": "static"

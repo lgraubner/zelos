@@ -46,16 +46,10 @@ const createContext = async (argv: Object): Object => {
       ...cliConfig
     }
   } catch (err) {
-    if (err.code === 'ENOENT') {
-      error(
-        'The current working directory does not contain a package.json file.'
-      )
-    } else {
-      error(
-        'An unexpected error occured while reading the config files.',
-        err.message
-      )
-    }
+    error(
+      'An unexpected error occured while reading the config files.',
+      err.message
+    )
 
     process.exit(1)
   }
