@@ -31,7 +31,6 @@ const transformScripts = async (ctx: Object) => {
       path: paths.public,
       filename: '[name]_[chunkhash].js'
     },
-    mode: config.minify ? 'development' : 'production',
     module: {
       rules: [
         {
@@ -45,7 +44,7 @@ const transformScripts = async (ctx: Object) => {
                 '@babel/env',
                 {
                   targets: {
-                    browsers: ['>0.25%', 'not ie 11', 'not op_mini all']
+                    browsers: config.browsers
                   }
                 }
               ]

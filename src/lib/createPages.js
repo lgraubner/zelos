@@ -1,8 +1,9 @@
 // @flow
-const groupBy = require('lodash/groupBy')
 const fs = require('fs-extra')
 const pluralize = require('pluralize')
+const groupBy = require('lodash/groupBy')
 const pick = require('lodash/pick')
+const orderBy = require('lodash/orderBy')
 
 const compileContent = require('../utils/compileContent')
 
@@ -13,7 +14,10 @@ const createPages = async (
 ) => {
   const { config } = ctx
 
-  const groupedPages = groupBy(pages, page => pluralize(page.type))
+  // sort by date and group by type
+  const groupedPages = groupBy(orderBy(pages, [p => p.date], ['desc']), p =>
+    pluralize(p.type)
+  )
 
   const siteData = {
     ...pick(config, ['author', 'siteName', 'description', 'params']),

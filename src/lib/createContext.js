@@ -9,6 +9,7 @@ const transformCliConfig = require('../utils/transformCliConfig')
 
 const defaultConfig = {
   assetDir: 'assets',
+  browsers: '>0.25%, not ie 11, not op_mini all',
   contentDir: 'content',
   defaultLayout: 'default',
   defaultPageType: 'page',
