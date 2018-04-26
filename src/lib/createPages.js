@@ -16,19 +16,9 @@ const createPages = async (
   const groupedPages = groupBy(pages, page => pluralize(page.type))
 
   const siteData = {
-    ...pick(config, [
-      'rss',
-      'serviceWorker',
-      'sitemap',
-      'siteUrl',
-      'author',
-      'siteName',
-      'description',
-      'params'
-    ]),
-    rssLink: `/${config.rssFilename}`,
-    serviceWorkerLink: '/sw.js',
-    sitemapLink: '/sitemap.xml',
+    ...pick(config, ['author', 'siteName', 'description', 'params']),
+    rssLink: config.rss ? `/${config.rssFilename}` : null,
+    serviceWorkerLink: config.serviceWorker ? '/sw.js' : null,
     manifest
   }
 
@@ -36,8 +26,11 @@ const createPages = async (
     pages.map(async page => {
       const data = {
         page,
-        site: siteData,
-        ...groupedPages
+        site: {
+          ...siteData,
+          allPages: pages,
+          ...groupedPages
+        }
       }
 
       const html = await compileContent(data, ctx)

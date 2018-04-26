@@ -111,6 +111,10 @@ All options have sensible defaults to generate a solid static website but can be
 
 ### Variables
 
+#### site
+
+#### page
+
 ### Pages
 
 ### Layouts
