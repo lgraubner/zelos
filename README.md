@@ -2,7 +2,7 @@
 
 > ☄️ A batteries included static site generator for Node.js
 
-__Table of contents__
+#### Table of contents
 
 - [Install](#install)
 - [CLI](#cli)
