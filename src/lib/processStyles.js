@@ -14,7 +14,10 @@ const processStyles = async (ctx: Object): Promise<any> => {
   const srcPath = resolve(paths.assets, 'css')
   const srcFiles = await glob(`${srcPath}/*.css`)
 
-  const plugins = [atImport, cssnext({ browsers: config.browsers })]
+  const plugins = [
+    atImport,
+    cssnext({ warnForDuplicates: false, browsers: config.browsers })
+  ]
 
   if (config.minify) {
     plugins.push(cssnano)
