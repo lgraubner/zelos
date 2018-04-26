@@ -2,7 +2,7 @@
 
 > ☄️ A batteries included static site generator for Node.js
 
-## Table of contents
+__Table of contents__
 
 - [Install](#install)
 - [CLI](#cli)
@@ -38,11 +38,11 @@ zelos build [options]
 
 #### --drafts
 
-Pages with `draft: true` will be not built by default. To build drafts add this option.
+Pages with `draft: true` will not be built by default. To build drafts add this option.
 
 ### serve
 
-Starts a local webserver serving the content from the public directory. This is for testing purposes only.
+Starts a local webserver serving the content from the public directory. Don't use this for production!
 
 ```bash
 zelos serve
@@ -56,7 +56,7 @@ Bootstraps a new project in the given path or current directory if no path is sp
 zelos new [path] [options]
 ```
 
-#### --url=<URL>
+#### --url
 
 As it's advised to set an [siteUrl](#defaults) you can directly set the siteUrl during initialization. The value gets written to the `config.json`.
 
