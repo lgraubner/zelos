@@ -38,6 +38,7 @@ const transformScripts = async (ctx: Object) => {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
+          plugins: ['@babel/plugin-transform-flow-strip-types'],
           options: {
             presets: [
               [
