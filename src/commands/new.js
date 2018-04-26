@@ -71,8 +71,8 @@ const main = async (argv_: string[]) => {
 
   try {
     await Promise.all([
-      fs.outputFile(baseLayoutPath, ''),
-      fs.outputFile(defaultLayoutPath, ''),
+      fs.outputFile(baseLayoutPath, '{{{content}}}'),
+      fs.outputFile(defaultLayoutPath, '{{{content}}}'),
       fs.ensureDir(staticPath),
       fs.ensureDir(contentPath),
       fs.outputJson(configPath, exampleConfig, {
