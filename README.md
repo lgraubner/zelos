@@ -2,14 +2,19 @@
 
 > ☄️ A batteries included static site generator for Node.js
 
-<details>
-<summary>Table of contents</summary>
+## Table of contents
+
 - [Install](#install)
 - [CLI](#cli)
 - [Usage](#usage)
+  - [Configuration](#configuration)
+  - [Variables](#variables)
+  - [Pages](#pages)
+  - [Layouts](#layouts)
+  - [Asset pipeline](#asset-pipeline)
+  - [Static data](#static-data)
 - [Motivation](#motivation)
 - [License](#license)
-</details>
 
 ## Install
 
