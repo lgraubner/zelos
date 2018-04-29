@@ -7,7 +7,7 @@ const pkg = require('../../package')
 
 const cleanPublicDir = require('../lib/cleanPublicDir')
 const copyStaticFiles = require('../lib/copyStaticFiles')
-const scanPages = require('../lib/scanPages')
+const preparePages = require('../lib/preparePages')
 const createPages = require('../lib/createPages')
 const createSitemap = require('../lib/createSitemap')
 const createServiceWorker = require('../lib/createServiceWorker')
@@ -71,8 +71,8 @@ const main = async (argv_: string[]): Promise<any> => {
 
   let pages = []
   try {
-    output.start('scanning pages')
-    pages = await scanPages(ctx)
+    output.start('preparing pages')
+    pages = await preparePages(ctx)
     output.succeed()
   } catch (err) {
     plain('\nAn unexpected error occured while scanning pages.', err.message)
@@ -150,6 +150,7 @@ const main = async (argv_: string[]): Promise<any> => {
       '\nAn unexpected error occured while creating static pages.',
       err.message
     )
+    console.log(err)
     return 1
   }
 

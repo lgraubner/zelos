@@ -1,20 +1,18 @@
 // @flow
 const fs = require('fs-extra')
-const handlebars = require('handlebars')
 
 const TemplateCache = (): Object => {
   const cache = new Map()
 
   return {
-    get: async (filePath: string) => {
+    get: async filePath => {
       if (cache.has(filePath)) {
-        return cache.get(filePath)
+        return cache.get(filePath) || ''
       }
 
-      const fileContent = await fs.readFile(filePath, 'utf8')
-      const template = handlebars.compile(fileContent)
-      cache.set(filePath, template)
-      return template
+      const layout = await fs.readFile(filePath, 'utf8')
+      cache.set(filePath, layout)
+      return layout
     }
   }
 }

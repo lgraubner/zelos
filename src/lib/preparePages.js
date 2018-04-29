@@ -3,10 +3,12 @@ const glob = require('globby')
 const debug = require('debug')('zelos:scanPages')
 const path = require('path')
 const { resolve } = require('url')
+const marked = require('marked')
 
 const getUrlPath = require('../utils/getUrlPath')
 const parseFile = require('../utils/parseFile')
 const filterDrafts = require('../utils/filterDrafts')
+const extractExcerpt = require('../utils/extractExcerpt')
 
 const scanPages = async (ctx: Object): Promise<any> => {
   const { paths, config } = ctx
@@ -19,11 +21,19 @@ const scanPages = async (ctx: Object): Promise<any> => {
 
       const { frontmatter, content } = await parseFile(filePath)
 
-      // get target path and create dir
       const relativePath = path.relative(paths.pages, filePath)
       const urlPath = getUrlPath(relativePath, frontmatter)
       const file = path.join(paths.public, urlPath, 'index.html')
       const contentType = path.extname(filePath).replace('.', '')
+
+      let excerpt = null
+      if (frontmatter.type === 'post') {
+        let fullContent = content
+        if (contentType === 'md') {
+          fullContent = marked(content)
+        }
+        excerpt = extractExcerpt(fullContent)
+      }
 
       return {
         isHome: urlPath === '/',
@@ -32,10 +42,11 @@ const scanPages = async (ctx: Object): Promise<any> => {
         srcFile: filePath,
         file,
         ...frontmatter,
-        link: urlPath,
+        url: urlPath,
         permalink: config.siteUrl ? resolve(config.siteUrl, urlPath) : urlPath,
-        content,
-        contentType
+        content: content,
+        contentType,
+        excerpt
       }
     })
   )
