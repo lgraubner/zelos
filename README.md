@@ -1,3 +1,7 @@
+---
+⚠️ This is a WiP and not tested in production. It's not likely that I will finish it ever (I can recommend [Gatsby](https://www.gatsbyjs.org/) instead), but this might be useful for how a static site generator can be built and how to structure a CLI heavy lib.
+---
+
 # Zelos
 
 > ☄️ A batteries included static site generator for Node.js
